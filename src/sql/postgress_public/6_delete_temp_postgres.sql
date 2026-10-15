@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS dev.product_view_table_tmp;

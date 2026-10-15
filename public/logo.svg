@@ -1,0 +1,34 @@
+<svg width="220" height="42" viewBox="0 0 220 42" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Brand Icon: Isometric Container / Global Freight Nexus -->
+  <g id="logo-mark">
+    <!-- Top Face -->
+    <path d="M22 4L37 12.5L22 21L7 12.5L22 4Z" fill="url(#gradient-top)"/>
+    <!-- Left Face -->
+    <path d="M7 12.5L22 21V37L7 28.5V12.5Z" fill="url(#gradient-left)"/>
+    <!-- Right Face -->
+    <path d="M22 21L37 12.5V28.5L22 37V21Z" fill="url(#gradient-right)"/>
+    <!-- Speed / Trade Pulse Lines -->
+    <path d="M22 8L33 14" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.6"/>
+    <path d="M11 17L22 23.5V33" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.4"/>
+  </g>
+
+  <!-- Typography -->
+  <text x="46" y="19" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="800" letter-spacing="0.08em" fill="#0F172A">LANDED COST</text>
+  <text x="46" y="32" font-family="system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="600" letter-spacing="0.16em" fill="#059669">GLOBAL TRADE ENGINE</text>
+
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="gradient-top" x1="7" y1="4" x2="37" y2="21" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#10B981"/>
+      <stop offset="1" stop-color="#059669"/>
+    </linearGradient>
+    <linearGradient id="gradient-left" x1="7" y1="12.5" x2="22" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#047857"/>
+      <stop offset="1" stop-color="#064E3B"/>
+    </linearGradient>
+    <linearGradient id="gradient-right" x1="22" y1="12.5" x2="37" y2="37" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#059669"/>
+      <stop offset="1" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+</svg>

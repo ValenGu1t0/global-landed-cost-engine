@@ -1,0 +1,73 @@
+'use client';
+
+import * as React from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Cross2Icon } from '@radix-ui/react-icons';
+import { useQueryState } from 'nuqs';
+import { useTransitionContext } from '@/hooks/use-transition-context';
+import { useDebouncedQueryState } from '@/hooks/use-debounced-query-state';
+import { HTSSearchParams } from '../searchparams';
+
+export function HTSFilters() {
+  const { startTransition } = useTransitionContext();
+
+  const [search, setSearch] = useDebouncedQueryState(
+    'search',
+    HTSSearchParams.search,
+    {
+      startTransition,
+      shallow: false,
+      debounceMs: 500
+    }
+  );
+
+  // Paginación estándar
+  const [page, setPage] = useQueryState(
+    'page',
+    HTSSearchParams.page.withOptions({
+      startTransition,
+      shallow: false
+    })
+  );
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value || null);
+    if (page !== 1) {
+      setPage(1);
+    }
+  };
+
+  const handleResetFilters = () => {
+    setSearch(null);
+    setPage(1);
+  };
+
+  const hasActiveFilters = search !== null;
+
+  return (
+    <div className='flex w-full items-center gap-2'>
+      <div className='flex flex-1 flex-wrap items-center gap-2'>
+        {/* Único input */}
+        <Input
+          placeholder='Search for HTS Codes...'
+          value={search || ''}
+          onChange={handleSearchChange}
+          className='h-9 w-56 lg:w-72'
+        />
+
+        {hasActiveFilters && (
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-9 border-dashed'
+            onClick={handleResetFilters}
+          >
+            <Cross2Icon />
+            Clean Search
+          </Button>
+        )}
+      </div>
+    </div>
+  );
+}

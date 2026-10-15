@@ -1,0 +1,15 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" rx="16" fill="#F1F5F9"/>
+  <!-- Isometric Box Icon -->
+  <g transform="translate(50, 45)">
+    <!-- Top Face -->
+    <path d="M50 10L85 30L50 50L15 30L50 10Z" fill="#94A3B8"/>
+    <!-- Left Face -->
+    <path d="M15 30L50 50V90L15 70V30Z" fill="#64748B"/>
+    <!-- Right Face -->
+    <path d="M50 50L85 30V70L50 90V50Z" fill="#475569"/>
+    <!-- Box Tape -->
+    <path d="M43 14L43 86" stroke="#E2E8F0" stroke-width="3" stroke-linecap="round" opacity="0.6"/>
+  </g>
+  <text x="100" y="160" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-size="12" font-weight="600" fill="#64748B">PRODUCT SAMPLE</text>
+</svg>
