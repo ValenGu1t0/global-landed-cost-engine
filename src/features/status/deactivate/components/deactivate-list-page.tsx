@@ -12,12 +12,12 @@ export default async function DeactivateStatusPage({}: DeactivateListPage) {
   const pageLimit = deactivateStatusSearchParamsCache.get('perPage');
 
   const status = deactivateStatusSearchParamsCache.get('status');
-  const hemicode = deactivateStatusSearchParamsCache.get('hemicode');
+  const cn_code = deactivateStatusSearchParamsCache.get('cn_code');
 
   const filters = {
     page,
     limit: pageLimit,
-    ...(hemicode && { hemicode }),
+    ...(cn_code && { cn_code }),
     ...(status && { status: status }),
     ...(sortBy && { sortBy }),
     ...(sortDirection && { sortDirection })

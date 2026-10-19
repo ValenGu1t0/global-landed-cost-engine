@@ -32,9 +32,9 @@ export async function getProductsToActivate(
     conditions.push(inArray(productTable.status, parsedInput.status));
   }
 
-  // Hemicode search
-  if (parsedInput.hemicode) {
-    conditions.push(ilike(productTable.hemicode, `%${parsedInput.hemicode}%`));
+  // CN-Code search
+  if (parsedInput.cn_code) {
+    conditions.push(ilike(productTable.cn_code, `%${parsedInput.cn_code}%`));
   }
 
   // IDs seleccionados (excel selección)
@@ -49,7 +49,7 @@ export async function getProductsToActivate(
 
   const orderByMap: Record<string, any> = {
     id: productTable.tech_sku_id,
-    hemicode: productTable.hemicode
+    cn_code: productTable.cn_code
   };
 
   const orderByClause: SQL[] = [];

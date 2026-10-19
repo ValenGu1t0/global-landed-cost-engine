@@ -17,7 +17,7 @@ import {
 /* PRODUCT VIEW TABLE */
 export const productViewTable = pgTable('product_view_table', {
   tech_sku_id: integer('tech_sku_id').primaryKey(),
-  hemicode: varchar('hemicode', { length: 30 }),
+  cn_code: varchar('cn_code', { length: 30 }),
   status: varchar('status', { length: 20 }),
 
   image_in_process: boolean('image_in_process'),
@@ -264,7 +264,7 @@ export const productTable = pgTable('product', {
   tech_sku_id: serial('tech_sku_id').primaryKey(),
 
   hts_category: varchar('hts_category', { length: 7 }),
-  hemicode: varchar('hemicode', { length: 30 }).unique(),
+  cn_code: varchar('cn_code', { length: 30 }).unique(),
 
   status: varchar('status', { length: 20 }).notNull(),
   factory_code: varchar('factory_code', { length: 50 }),

@@ -3,7 +3,7 @@ TRUNCATE int.product_view;
 INSERT INTO int.product_view
 SELECT 
     p.tech_sku_id,
-    p.hemicode,
+    p.cn_code,
     p.status,
     p.image_in_process,
     p.factory_code,

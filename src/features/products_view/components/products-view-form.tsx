@@ -28,6 +28,7 @@ import {
 } from '../data/get-product-image-by-id';
 import { FormCheckbox } from '@/components/forms/form-checkbox';
 import { ProductEconomicsCard } from './product-economics-card';
+import { resolveProductImageUrl } from '@/constants/data';
 
 type Props = {
   initialData: ProductTable;
@@ -111,7 +112,7 @@ function prepareDataForSessionStorage(data: ProductTable) {
   // Sobrescribimos
   const duplicatedData = {
     ...normalized,
-    hemicode: `COPY OF ${data.hemicode}`,
+    cn_code: `COPY OF ${data.cn_code}`,
     status: 'ACTIVE'
   };
   return JSON.stringify(duplicatedData);
@@ -165,12 +166,17 @@ export default function ProductViewForm({
 }: Props) {
   const [isEditMode, setIsEditMode] = useState(false);
 
+  const initialImagePaths = (initialData as any)?.image_path
+    ? [resolveProductImageUrl(String((initialData as any).image_path))]
+    : undefined;
+
   const { data: imageUrls, isLoading: isImagesLoading } = useQuery<
     FullImageUrl[]
   >({
     queryKey: ['productImages', initialData.tech_sku_id],
     queryFn: () =>
       getProductImagesBySkuId({ tech_sku_id: initialData.tech_sku_id }),
+    initialData: initialImagePaths,
     staleTime: Infinity,
     enabled: initialData.tech_sku_id > 0
   });
@@ -271,7 +277,7 @@ export default function ProductViewForm({
       <CardHeader>
         <div className='flex items-center justify-between'>
           <CardTitle className='text-left text-2xl font-bold'>
-            {pageTitle}: {initialData.hemicode}
+            {pageTitle}: {initialData.cn_code}
           </CardTitle>
 
           <div className='flex flex-row gap-2'>
@@ -314,8 +320,8 @@ export default function ProductViewForm({
               <Grid>
                 <FormInput
                   control={form.control}
-                  name='hemicode'
-                  label='Hemicode'
+                  name='cn_code'
+                  label='CN-Code'
                 />
                 <FormInput
                   control={form.control}
@@ -927,7 +933,7 @@ export default function ProductViewForm({
             {/* ---------------- General (Read Mode) ---------------- */}
             <Section title='General'>
               <Grid>
-                <ReadField label='Hemicode' value={initialData.hemicode} />
+                <ReadField label='CN-Code' value={initialData.cn_code} />
                 <ReadField label='Status' value={initialData.status} />
                 <ReadField label='Vendor' value={initialData.vendor} />
                 <ReadField label='Brand Name' value={initialData.brand_name} />

@@ -59,17 +59,17 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible='icon'>
-      <SidebarHeader className='flex items-center justify-center p-4 group-data-[collapsible=icon]:p-2'>
+      <SidebarHeader className='flex items-center justify-center px-4 pt-6 pb-2 group-data-[collapsible=icon]:px-2 group-data-[collapsible=icon]:pt-4 group-data-[collapsible=icon]:pb-2'>
         <Link
           href='/dashboard/overview'
-          className='flex items-center justify-center'
+          className='flex w-full items-center justify-center'
         >
           <Image
             src='/connectar-symbol.png'
-            width={112}
-            height={71}
+            width={80}
+            height={51}
             alt='ConnectAR Logo'
-            className='h-auto w-24 object-contain transition-all group-data-[collapsible=icon]:hidden'
+            className='mx-auto h-auto w-16 object-contain transition-all group-data-[collapsible=icon]:hidden'
             priority
           />
           <Image
@@ -77,14 +77,14 @@ export default function AppSidebar() {
             width={32}
             height={32}
             alt='ConnectAR Icon'
-            className='hidden size-8 object-contain transition-all group-data-[collapsible=icon]:block'
+            className='mx-auto hidden size-8 object-contain transition-all group-data-[collapsible=icon]:block'
             priority
           />
         </Link>
       </SidebarHeader>
 
       <SidebarContent className='overflow-x-hidden'>
-        <SidebarGroup>
+        <SidebarGroup className='pt-1'>
           <SidebarGroupLabel>Overview</SidebarGroupLabel>
           <SidebarMenu>
             {navItems.map((item) => {

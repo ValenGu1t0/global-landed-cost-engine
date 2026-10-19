@@ -40,11 +40,11 @@ export function ParameterInfoBanner({
   const isSingle = cardinality === 'single_deprecating';
 
   return (
-    <Card className='border-primary/20 bg-muted/30 mb-2 overflow-hidden shadow-sm transition-all'>
-      <div className='flex flex-wrap items-center justify-between gap-3 p-4'>
+    <Card className='border-primary/20 bg-muted/30 shrink-0 !gap-0 overflow-hidden !py-0 shadow-sm transition-all'>
+      <div className='flex flex-wrap items-center justify-between gap-3 px-3.5 py-2.5'>
         <div className='flex items-center gap-3'>
-          <div className='bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-lg'>
-            <BookOpen className='h-5 w-5' />
+          <div className='bg-primary/10 text-primary flex h-8 w-8 shrink-0 items-center justify-center rounded-md'>
+            <BookOpen className='h-4 w-4' />
           </div>
           <div>
             <div className='flex items-center gap-2'>
@@ -75,7 +75,7 @@ export function ParameterInfoBanner({
           variant='ghost'
           size='sm'
           onClick={() => setIsOpen(!isOpen)}
-          className='text-muted-foreground hover:text-foreground text-xs'
+          className='text-muted-foreground hover:text-foreground h-8 text-xs'
         >
           {isOpen ? 'Hide Engine Specs' : 'View Business Logic & Formulas'}
           {isOpen ? (
@@ -87,7 +87,7 @@ export function ParameterInfoBanner({
       </div>
 
       {isOpen && (
-        <CardContent className='border-border/60 bg-background/50 border-t p-4 pt-4 text-xs leading-relaxed'>
+        <CardContent className='border-border/60 bg-background/50 border-t px-3.5 py-3 text-xs leading-relaxed'>
           <div className='grid grid-cols-1 gap-4 md:grid-cols-3'>
             {/* Column 1: Trade Purpose */}
             <div className='space-y-1.5'>

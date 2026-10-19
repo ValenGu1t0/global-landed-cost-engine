@@ -14,7 +14,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
  AND gf.origin_country = p.origin_country
  AND gf.container_type = '40HC'
  AND gf.destination_country = 'UNITED STATES'
- AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+ AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_40hc c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -34,7 +34,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
  AND gf.origin_country = p.origin_country
  AND gf.container_type = '45HC'
  AND gf.destination_country = 'UNITED STATES'
- AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+ AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_45hc c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -54,7 +54,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
  AND gf.origin_country = p.origin_country
  AND gf.container_type = '40STD'
  AND gf.destination_country = 'UNITED STATES'
- AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+ AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_40std c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -74,7 +74,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
  AND gf.origin_country = p.origin_country
  AND gf.container_type = '20STD'
  AND gf.destination_country = 'UNITED STATES'
- AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+ AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_20std c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -94,6 +94,6 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
  AND gf.origin_country = p.origin_country
  AND gf.container_type = '53FT'
  AND gf.destination_country = 'UNITED STATES'
- AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+ AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_53ft c40 
   ON c40.tech_sku_id = p.tech_sku_id;

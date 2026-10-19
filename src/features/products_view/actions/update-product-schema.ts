@@ -11,7 +11,7 @@ export const updateProductSchema = z
     tech_sku_id: z.coerce.number(),
 
     hts_category: z.string().optional().nullable(),
-    hemicode: z.string().optional().nullable(),
+    cn_code: z.string().optional().nullable(),
     status: z.string(),
     factory_code: z.string().optional().nullable(),
     factory_mold: z.string().optional().nullable(),

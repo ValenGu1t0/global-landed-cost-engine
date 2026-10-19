@@ -65,7 +65,7 @@ export const CONTAINER_SPECS: Record<string, ContainerSpec> = {
 
 export interface ProductEconomicsInput {
   tech_sku_id?: number;
-  hemicode?: string | null;
+  cn_code?: string | null;
   status?: string | null;
   vendor?: string | null;
   product_or_kit?: string | null;

@@ -7,7 +7,7 @@ const isValidExcelFile = (file: File): boolean => {
   return EXCEL_MIME_TYPES.includes(file.type);
 };
 
-export const bulkUpdateHemicodeSchema = z.object({
+export const bulkUpdateCnCodeSchema = z.object({
   excel: z
     .any()
     .optional()
@@ -22,4 +22,4 @@ export const bulkUpdateHemicodeSchema = z.object({
     )
 });
 
-export type BulkUpdateHemicodeSchema = z.infer<typeof bulkUpdateHemicodeSchema>;
+export type BulkUpdateCnCodeSchema = z.infer<typeof bulkUpdateCnCodeSchema>;

@@ -22,26 +22,26 @@ import {
 } from '@/components/ui/dialog';
 
 import {
-  bulkUpdateHemicodeSchema,
-  type BulkUpdateHemicodeSchema
-} from '@/features/products_view/actions/bulk-update-hemicode-schema';
-import { bulkUpdateHemicodes } from '@/features/products_view/actions/bulk-update-hemicodes';
+  bulkUpdateCnCodeSchema,
+  type BulkUpdateCnCodeSchema
+} from '@/features/products_view/actions/bulk-update-cn-code-schema';
+import { bulkUpdateCnCodes } from '@/features/products_view/actions/bulk-update-cn-codes';
 import PageContainer from '@/components/layout/page-container';
 
-export default function HemicodesBulkUpdateSection() {
+export default function CnCodesBulkUpdateSection() {
   // Estado para los errores masivos
   const [errorList, setErrorList] = useState<string[] | null>(null);
 
   const form = useZodForm({
-    schema: bulkUpdateHemicodeSchema,
+    schema: bulkUpdateCnCodeSchema,
     mode: 'all'
   });
 
   const canSubmit = !form.formState.isSubmitting && form.formState.isValid;
 
   const { mutate, isPending } = useMutation({
-    mutationFn: async (data: BulkUpdateHemicodeSchema) =>
-      resolveActionResult(bulkUpdateHemicodes(data)),
+    mutationFn: async (data: BulkUpdateCnCodeSchema) =>
+      resolveActionResult(bulkUpdateCnCodes(data)),
 
     onSuccess: (data) => {
       if (data?.errors?.length > 0) {
@@ -58,7 +58,7 @@ export default function HemicodesBulkUpdateSection() {
     }
   });
 
-  const onSubmit: SubmitHandler<BulkUpdateHemicodeSchema> = async (data) => {
+  const onSubmit: SubmitHandler<BulkUpdateCnCodeSchema> = async (data) => {
     if (!canSubmit) return;
     mutate(data);
   };
@@ -69,8 +69,8 @@ export default function HemicodesBulkUpdateSection() {
         {/* HEADER */}
         <div className='flex items-center justify-between'>
           <Heading
-            title='Update Product Hemicodes'
-            description='Bulk Update for Products Hemicodes'
+            title='Update Product CN-Codes'
+            description='Bulk Update for Products CN-Codes'
           />
         </div>
 
@@ -107,7 +107,7 @@ export default function HemicodesBulkUpdateSection() {
               </Button>
 
               <Button type='submit' disabled={!canSubmit || isPending}>
-                {isPending ? 'Updating...' : 'Update Product Hemicodes'}
+                {isPending ? 'Updating...' : 'Update Product CN-Codes'}
               </Button>
             </div>
           </Form>

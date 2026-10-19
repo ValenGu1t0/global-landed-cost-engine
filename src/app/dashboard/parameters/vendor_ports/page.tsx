@@ -31,7 +31,7 @@ export default async function Page(props: pageProps) {
 
   return (
     <PageContainer scrollable={false}>
-      <div className='flex min-h-0 min-w-0 flex-1 flex-col space-y-4'>
+      <div className='flex min-h-0 min-w-0 flex-1 flex-col gap-4'>
         <div className='flex items-center justify-between'>
           <Heading title='Vendor Ports' description='Manage Vendor Ports' />
           <VendorPortActions />

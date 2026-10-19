@@ -53,9 +53,9 @@ LEFT JOIN int.calc_estimated_cpap est
 
 TRUNCATE int.estimated_optimal_cpap;
 
-INSERT INTO int.estimated_optimal_cpap (hemicode, tech_sku_id, optimal_carton_per_pallet)
+INSERT INTO int.estimated_optimal_cpap (cn_code, tech_sku_id, optimal_carton_per_pallet)
 SELECT 
-    p.hemicode,
+    p.cn_code,
     p.tech_sku_id,
     CASE 
         WHEN (bd.carton_weight_lb * op.optimal_carton_per_pallet * 30) >= 29000 

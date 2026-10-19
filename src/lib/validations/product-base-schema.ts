@@ -4,7 +4,7 @@ export const productBaseSchema = z.object({
   tech_sku_id: z.number().optional(),
 
   hts_category: z.string().max(7).optional(),
-  hemicode: z.string().max(30).optional(),
+  cn_code: z.string().max(30).optional(),
   status: z.string().optional(),
   factory_code: z.string().max(50).optional(),
   factory_mold: z.string().max(50).optional(),

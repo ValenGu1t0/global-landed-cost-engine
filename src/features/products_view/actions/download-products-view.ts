@@ -58,10 +58,10 @@ const COLUMN_CONFIGS: Record<
     header: 'SKU ID',
     format: (_, row) => row.tech_sku_id?.toString() ?? ''
   },
-  hemicode: {
-    id: 'hemicode',
-    header: 'Hemicode',
-    format: (_, row) => row.hemicode || ''
+  cn_code: {
+    id: 'cn_code',
+    header: 'CN-Code',
+    format: (_, row) => row.cn_code || ''
   },
   status: {
     id: 'status',

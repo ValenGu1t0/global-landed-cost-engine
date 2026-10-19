@@ -2,14 +2,14 @@
 
 import { authActionClient } from '@/lib/actions/safe-action';
 import {
-  bulkUpdateHemicodeSchema,
-  BulkUpdateHemicodeSchema
-} from './bulk-update-hemicode-schema';
+  bulkUpdateCnCodeSchema,
+  BulkUpdateCnCodeSchema
+} from './bulk-update-cn-code-schema';
 import db from '@/db';
 import { productTable } from '@/db/schema';
 import * as XLSX from 'xlsx';
 import { revalidatePath } from 'next/cache';
-import { BulkHemicodeUpdateInput } from '../lib/product-factory';
+import { BulkCnCodeUpdateInput } from '../lib/product-factory';
 import { eq, inArray } from 'drizzle-orm';
 import { validateExcelRowCount } from '@/lib/demo-guardrails';
 
@@ -21,9 +21,9 @@ function isPresent(value: unknown): boolean {
   return true;
 }
 
-export const bulkUpdateHemicodes = authActionClient
-  .metadata({ actionName: 'bulkUpdateHemicodes' })
-  .inputSchema(bulkUpdateHemicodeSchema)
+export const bulkUpdateCnCodes = authActionClient
+  .metadata({ actionName: 'bulkUpdateCnCodes' })
+  .inputSchema(bulkUpdateCnCodeSchema)
   .action(async ({ parsedInput }) => {
     const file = Array.isArray(parsedInput.excel)
       ? parsedInput.excel[0]
@@ -39,13 +39,10 @@ export const bulkUpdateHemicodes = authActionClient
 
     /* --------------------- PARSEO DE EXCEL --------------------- */
 
-    const data: BulkHemicodeUpdateInput[] = XLSX.utils.sheet_to_json(
-      worksheet,
-      {
-        raw: false,
-        defval: null
-      }
-    );
+    const data: BulkCnCodeUpdateInput[] = XLSX.utils.sheet_to_json(worksheet, {
+      raw: false,
+      defval: null
+    });
 
     /* --------------------- DEMO GUARDRAILS --------------------- */
     const rowGuard = validateExcelRowCount(data, 'SKUs');
@@ -62,11 +59,11 @@ export const bulkUpdateHemicodes = authActionClient
       VALIDACIÓN DE HEADERS
     ----------------------------------------------------------- */
 
-    if (!headerRow.includes('old_hemicode')) {
-      allErrors.push("The column 'old_hemicode' is required.");
+    if (!headerRow.includes('old_cn_code')) {
+      allErrors.push("The column 'old_cn_code' is required.");
     }
-    if (!headerRow.includes('new_hemicode')) {
-      allErrors.push("The column 'new_hemicode' is required.");
+    if (!headerRow.includes('new_cn_code')) {
+      allErrors.push("The column 'new_cn_code' is required.");
     }
 
     if (allErrors.length > 0) {
@@ -85,8 +82,8 @@ export const bulkUpdateHemicodes = authActionClient
     const emptyNew: number[] = [];
 
     data.forEach((row, index) => {
-      const oldCode = (row as any).old_hemicode;
-      const newCode = (row as any).new_hemicode;
+      const oldCode = (row as any).old_cn_code;
+      const newCode = (row as any).new_cn_code;
 
       if (!isPresent(oldCode)) emptyOld.push(index + 2);
       if (!isPresent(newCode)) emptyNew.push(index + 2);
@@ -94,13 +91,13 @@ export const bulkUpdateHemicodes = authActionClient
 
     if (emptyOld.length > 0) {
       allErrors.push(
-        `Column 'old_hemicode' must be filled. Empty rows: ${emptyOld.join(', ')}`
+        `Column 'old_cn_code' must be filled. Empty rows: ${emptyOld.join(', ')}`
       );
     }
 
     if (emptyNew.length > 0) {
       allErrors.push(
-        `Column 'new_hemicode' must be filled. Empty rows: ${emptyNew.join(', ')}`
+        `Column 'new_cn_code' must be filled. Empty rows: ${emptyNew.join(', ')}`
       );
     }
 
@@ -116,8 +113,8 @@ export const bulkUpdateHemicodes = authActionClient
       VALIDACIÓN DE DUPLICADOS DENTRO DEL EXCEL
     ----------------------------------------------------------- */
 
-    const oldCodes = data.map((r) => (r as any).old_hemicode);
-    const newCodes = data.map((r) => (r as any).new_hemicode);
+    const oldCodes = data.map((r) => (r as any).old_cn_code);
+    const newCodes = data.map((r) => (r as any).new_cn_code);
 
     function findDuplicates(arr: string[]) {
       const seen = new Set<string>();
@@ -134,13 +131,13 @@ export const bulkUpdateHemicodes = authActionClient
 
     if (duplicatedOld.length > 0) {
       allErrors.push(
-        `The following old_hemicodes are duplicated inside the Excel: ${duplicatedOld.join(', ')}`
+        `The following old_cn_codes are duplicated inside the Excel: ${duplicatedOld.join(', ')}`
       );
     }
 
     if (duplicatedNew.length > 0) {
       allErrors.push(
-        `The following new_hemicodes are duplicated inside the Excel: ${duplicatedNew.join(', ')}`
+        `The following new_cn_codes are duplicated inside the Excel: ${duplicatedNew.join(', ')}`
       );
     }
 
@@ -156,34 +153,34 @@ export const bulkUpdateHemicodes = authActionClient
       VALIDACIÓN CONTRA BASE DE DATOS
     ----------------------------------------------------------- */
 
-    // 1. Todos los old_hemicodes deben existir en la DB.
+    // 1. Todos los old_cn_codes deben existir en la DB.
     const uniqueOldCodes = Array.from(new Set(oldCodes));
     const existingOldProducts = await db
-      .select({ hemicode: productTable.hemicode })
+      .select({ cn_code: productTable.cn_code })
       .from(productTable)
-      .where(inArray(productTable.hemicode, uniqueOldCodes));
+      .where(inArray(productTable.cn_code, uniqueOldCodes));
 
-    const existingOld = existingOldProducts.map((p) => p.hemicode);
+    const existingOld = existingOldProducts.map((p) => p.cn_code);
     const missingOld = uniqueOldCodes.filter((h) => !existingOld.includes(h));
 
     if (missingOld.length > 0) {
       allErrors.push(
-        `These old_hemicodes do not exist in the product table: ${missingOld.join(', ')}`
+        `These old_cn_codes do not exist in the product table: ${missingOld.join(', ')}`
       );
     }
 
-    // 2. Ningún new_hemicode puede existir actualmente en DB.
+    // 2. Ningún new_cn_code puede existir actualmente en DB.
     const uniqueNewCodes = Array.from(new Set(newCodes));
     const existingNewProducts = await db
-      .select({ hemicode: productTable.hemicode })
+      .select({ cn_code: productTable.cn_code })
       .from(productTable)
-      .where(inArray(productTable.hemicode, uniqueNewCodes));
+      .where(inArray(productTable.cn_code, uniqueNewCodes));
 
-    const existingNew = existingNewProducts.map((p) => p.hemicode);
+    const existingNew = existingNewProducts.map((p) => p.cn_code);
 
     if (existingNew.length > 0) {
       allErrors.push(
-        `These new_hemicodes already exist in the product table: ${existingNew.join(', ')}`
+        `These new_cn_codes already exist in the product table: ${existingNew.join(', ')}`
       );
     }
 
@@ -203,8 +200,8 @@ export const bulkUpdateHemicodes = authActionClient
       for (const row of data) {
         await tx
           .update(productTable)
-          .set({ hemicode: (row as any).new_hemicode })
-          .where(eq(productTable.hemicode, (row as any).old_hemicode));
+          .set({ cn_code: (row as any).new_cn_code })
+          .where(eq(productTable.cn_code, (row as any).old_cn_code));
       }
     });
 
@@ -267,11 +264,11 @@ export const bulkUpdateHemicodes = authActionClient
       }
     });
 
-    revalidatePath('/dashboard/edit/hemicode');
+    revalidatePath('/dashboard/edit/cn_code');
 
     return {
       success: true,
-      message: `${data.length} hemicodes updated successfully.`,
+      message: `${data.length} cn_codes updated successfully.`,
       errors: []
     };
   });

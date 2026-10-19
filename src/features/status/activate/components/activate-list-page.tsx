@@ -11,7 +11,7 @@ export default async function ActivateStatusPage({}: ActivateListPage) {
   const pageLimit = activateStatusSearchParamsCache.get('perPage');
   const sortBy = activateStatusSearchParamsCache.get('sortBy');
   const sortDirection = activateStatusSearchParamsCache.get('sortDirection');
-  const hemicode = activateStatusSearchParamsCache.get('hemicode');
+  const cn_code = activateStatusSearchParamsCache.get('cn_code');
 
   const rawStatus = activateStatusSearchParamsCache.get('status');
   const status: GetProductsToActivateSchema['status'] =
@@ -25,7 +25,7 @@ export default async function ActivateStatusPage({}: ActivateListPage) {
   const filters = {
     page,
     limit: pageLimit,
-    ...(hemicode && { hemicode }),
+    ...(cn_code && { cn_code }),
     ...(status && { status }),
     ...(sortBy && { sortBy }),
     ...(sortDirection && { sortDirection })

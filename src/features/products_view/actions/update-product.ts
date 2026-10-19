@@ -34,17 +34,14 @@ export const updateProduct = authActionClient
       throw new Error(`Product not found: ${tech_sku_id}`);
     }
 
-    // Si se llega a modificar el hemicode, chequeamos que no exista ya en la DB
-    if (
-      parsedInput.hemicode &&
-      parsedInput.hemicode !== currentProduct.hemicode
-    ) {
+    // Si se llega a modificar el cn_code, chequeamos que no exista ya en la DB
+    if (parsedInput.cn_code && parsedInput.cn_code !== currentProduct.cn_code) {
       const repeated = await db
         .select()
         .from(productTable)
         .where(
           and(
-            eq(productTable.hemicode, parsedInput.hemicode),
+            eq(productTable.cn_code, parsedInput.cn_code),
             ne(productTable.tech_sku_id, tech_sku_id)
           )
         )
@@ -52,7 +49,7 @@ export const updateProduct = authActionClient
 
       if (repeated.length > 0) {
         throw new Error(
-          `Product with this hemicode already exists: ${parsedInput.hemicode}`
+          `Product with this cn_code already exists: ${parsedInput.cn_code}`
         );
       }
     }
@@ -257,7 +254,7 @@ export const updateProduct = authActionClient
         .update(productViewTable)
         .set({
           ...economics,
-          ...(parsedInput.hemicode ? { hemicode: parsedInput.hemicode } : {}),
+          ...(parsedInput.cn_code ? { cn_code: parsedInput.cn_code } : {}),
           ...(parsedInput.description
             ? { description: parsedInput.description }
             : {}),

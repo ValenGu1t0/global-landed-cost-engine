@@ -43,39 +43,39 @@ export const bulkActivationExcel = authActionClient
     }
 
     // ---------- REQUIRED COLUMNS ----------
-    if (!headerRow.includes('hemicode')) {
+    if (!headerRow.includes('cn_code')) {
       return {
         success: false,
         message: 'Missing required columns.',
-        errors: ['The column "hemicode" is required.']
+        errors: ['The column "cn_code" is required.']
       };
     }
 
     // ---------- BASIC VALIDATION ----------
     const errors: string[] = [];
-    const hemicodes: string[] = [];
+    const cn_codes: string[] = [];
 
     data.forEach((row, i) => {
       const rowIndex = i + 2;
-      const hemicode = String(row.hemicode || '').trim();
+      const cn_code = String(row.cn_code || '').trim();
 
-      if (!hemicode) {
-        errors.push(`[Row ${rowIndex}] hemicode cannot be empty.`);
+      if (!cn_code) {
+        errors.push(`[Row ${rowIndex}] cn_code cannot be empty.`);
         return;
       }
 
-      hemicodes.push(hemicode);
+      cn_codes.push(cn_code);
     });
 
     // Duplicates
-    const duplicates = hemicodes.filter((h, i) => hemicodes.indexOf(h) !== i);
+    const duplicates = cn_codes.filter((h, i) => cn_codes.indexOf(h) !== i);
 
     if (duplicates.length > 0) {
       const unique = duplicates.filter(
         (value, index, self) => self.indexOf(value) === index
       );
 
-      errors.push(`Duplicated hemicodes in Excel: ${unique.join(', ')}`);
+      errors.push(`Duplicated cn_codes in Excel: ${unique.join(', ')}`);
     }
 
     if (errors.length > 0) {
@@ -90,16 +90,16 @@ export const bulkActivationExcel = authActionClient
     const products = await db
       .select()
       .from(productTable)
-      .where(inArray(productTable.hemicode, hemicodes));
+      .where(inArray(productTable.cn_code, cn_codes));
 
-    if (products.length !== hemicodes.length) {
-      const found = products.map((p) => p.hemicode);
-      const missing = hemicodes.filter((h) => !found.includes(h));
+    if (products.length !== cn_codes.length) {
+      const found = products.map((p) => p.cn_code);
+      const missing = cn_codes.filter((h) => !found.includes(h));
 
       return {
         success: false,
-        message: 'Some hemicodes do not exist.',
-        errors: [`Hemicodes not found: ${missing.join(', ')}`]
+        message: 'Some cn_codes do not exist.',
+        errors: [`CN-Codes not found: ${missing.join(', ')}`]
       };
     }
 
@@ -111,7 +111,7 @@ export const bulkActivationExcel = authActionClient
         success: false,
         message: 'Some products are already ACTIVE.',
         errors: [
-          `Already ACTIVE: ${alreadyActive.map((p) => p.hemicode).join(', ')}`
+          `Already ACTIVE: ${alreadyActive.map((p) => p.cn_code).join(', ')}`
         ]
       };
     }
@@ -136,7 +136,7 @@ export const bulkActivationExcel = authActionClient
       await tx
         .update(productTable)
         .set({ status: 'ACTIVE' })
-        .where(inArray(productTable.hemicode, hemicodes));
+        .where(inArray(productTable.cn_code, cn_codes));
     });
 
     // Recompute product economics with the deterministic engine
@@ -157,7 +157,7 @@ export const bulkActivationExcel = authActionClient
 
     return {
       success: true,
-      message: `${hemicodes.length} products successfully activated!`,
+      message: `${cn_codes.length} products successfully activated!`,
       errors: []
     };
   });

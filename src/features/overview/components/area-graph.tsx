@@ -19,24 +19,24 @@ import {
 } from '@/components/ui/chart';
 
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 }
+  { month: 'May', fob: 18.4, duty_freight: 6.8 },
+  { month: 'June', fob: 18.2, duty_freight: 7.1 },
+  { month: 'July', fob: 18.5, duty_freight: 6.9 },
+  { month: 'August', fob: 18.1, duty_freight: 7.4 },
+  { month: 'September', fob: 17.9, duty_freight: 6.6 },
+  { month: 'October', fob: 17.8, duty_freight: 6.4 }
 ];
 
 const chartConfig = {
-  visitors: {
-    label: 'Visitors'
+  landed: {
+    label: 'Avg. Unit Cost ($ USD)'
   },
-  desktop: {
-    label: 'Desktop',
+  fob: {
+    label: 'FOB Factory Cost ($)',
     color: 'var(--primary)'
   },
-  mobile: {
-    label: 'Mobile',
+  duty_freight: {
+    label: 'Duties + Freight ($)',
     color: 'var(--primary)'
   }
 } satisfies ChartConfig;
@@ -45,9 +45,10 @@ export function AreaGraph() {
   return (
     <Card className='@container/card'>
       <CardHeader>
-        <CardTitle>Area Chart - Stacked</CardTitle>
+        <CardTitle>Landed Cost Structure Evolution (USD / Unit)</CardTitle>
         <CardDescription>
-          Showing total visitors for the last 6 months
+          Stacked comparison of average FOB factory cost vs. duties &amp;
+          multi-modal freight overhead
         </CardDescription>
       </CardHeader>
       <CardContent className='px-2 pt-4 sm:px-6 sm:pt-6'>
@@ -66,24 +67,24 @@ export function AreaGraph() {
               <linearGradient id='fillDesktop' x1='0' y1='0' x2='0' y2='1'>
                 <stop
                   offset='5%'
-                  stopColor='var(--color-desktop)'
+                  stopColor='var(--color-fob)'
                   stopOpacity={1.0}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-desktop)'
+                  stopColor='var(--color-fob)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
               <linearGradient id='fillMobile' x1='0' y1='0' x2='0' y2='1'>
                 <stop
                   offset='5%'
-                  stopColor='var(--color-mobile)'
+                  stopColor='var(--color-duty_freight)'
                   stopOpacity={0.8}
                 />
                 <stop
                   offset='95%'
-                  stopColor='var(--color-mobile)'
+                  stopColor='var(--color-duty_freight)'
                   stopOpacity={0.1}
                 />
               </linearGradient>
@@ -102,17 +103,17 @@ export function AreaGraph() {
               content={<ChartTooltipContent indicator='dot' />}
             />
             <Area
-              dataKey='mobile'
+              dataKey='duty_freight'
               type='natural'
               fill='url(#fillMobile)'
-              stroke='var(--color-mobile)'
+              stroke='var(--color-duty_freight)'
               stackId='a'
             />
             <Area
-              dataKey='desktop'
+              dataKey='fob'
               type='natural'
               fill='url(#fillDesktop)'
-              stroke='var(--color-desktop)'
+              stroke='var(--color-fob)'
               stackId='a'
             />
           </AreaChart>
@@ -122,11 +123,11 @@ export function AreaGraph() {
         <div className='flex w-full items-start gap-2 text-sm'>
           <div className='grid gap-2'>
             <div className='flex items-center gap-2 leading-none font-medium'>
-              Trending up by 5.2% this month{' '}
-              <IconTrendingUp className='h-4 w-4' />
+              Ocean freight stabilization reduced landed overhead by 1.8% in
+              October <IconTrendingUp className='h-4 w-4' />
             </div>
             <div className='text-muted-foreground flex items-center gap-2 leading-none'>
-              January - June 2024
+              May – October 2026 (Weighted SKU Catalog Average)
             </div>
           </div>
         </div>

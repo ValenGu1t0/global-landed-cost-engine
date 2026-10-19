@@ -190,7 +190,7 @@ export async function getProductsView(input: GetProductsViewSchema): Promise<{
     conditions.push(
       or(
         like(productViewTable.hts_code, `\%${parsedInput.search}\%`),
-        like(productViewTable.hemicode, `\%${parsedInput.search}\%`),
+        like(productViewTable.cn_code, `\%${parsedInput.search}\%`),
 
         like(productViewTable.vendor, `\%${parsedInput.search}\%`),
         like(productViewTable.brand_name, `\%${parsedInput.search}\%`),

@@ -111,7 +111,7 @@ export function ProductEconomicsCard({ product }: Props) {
               </CardTitle>
               <p className='text-muted-foreground text-xs'>
                 Automated multi-modal freight yield and tariff allocation for
-                SKU: {p.hemicode || `ID-${p.tech_sku_id}`}
+                SKU: {p.cn_code || `ID-${p.tech_sku_id}`}
               </p>
             </div>
           </div>

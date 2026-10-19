@@ -113,20 +113,27 @@ const chartData = [
   { date: '2024-06-30', desktop: 446, mobile: 400 }
 ];
 
+const chartDataWithLcl = chartData.map((item, idx) => ({
+  ...item,
+  lcl: Math.round(
+    (item.desktop * 0.35 + item.mobile * 0.25) * (0.85 + (idx % 5) * 0.08)
+  )
+}));
+
 const chartConfig = {
   views: {
-    label: 'Page Views'
+    label: 'Shipped Units'
   },
   desktop: {
-    label: 'Desktop',
+    label: 'Ocean (40HC / 45HC)',
     color: 'var(--primary)'
   },
   mobile: {
-    label: 'Mobile',
+    label: 'Inland (53FT / 40STD)',
     color: 'var(--primary)'
   },
-  error: {
-    label: 'Error',
+  lcl: {
+    label: '20STD & LCL Freight',
     color: 'var(--primary)'
   }
 } satisfies ChartConfig;
@@ -137,8 +144,9 @@ export function BarGraph() {
 
   const total = React.useMemo(
     () => ({
-      desktop: chartData.reduce((acc, curr) => acc + curr.desktop, 0),
-      mobile: chartData.reduce((acc, curr) => acc + curr.mobile, 0)
+      desktop: chartDataWithLcl.reduce((acc, curr) => acc + curr.desktop, 0),
+      mobile: chartDataWithLcl.reduce((acc, curr) => acc + curr.mobile, 0),
+      lcl: chartDataWithLcl.reduce((acc, curr) => acc + curr.lcl, 0)
     }),
     []
   );
@@ -149,12 +157,6 @@ export function BarGraph() {
     setIsClient(true);
   }, []);
 
-  React.useEffect(() => {
-    if (activeChart === 'error') {
-      throw new Error('Mocking Error');
-    }
-  }, [activeChart]);
-
   if (!isClient) {
     return null;
   }
@@ -163,18 +165,20 @@ export function BarGraph() {
     <Card className='@container/card !pt-3'>
       <CardHeader className='flex flex-col items-stretch space-y-0 border-b !p-0 sm:flex-row'>
         <div className='flex flex-1 flex-col justify-center gap-1 px-6 !py-0'>
-          <CardTitle>Bar Chart - Interactive</CardTitle>
+          <CardTitle>Shipped Volume by Container Mode</CardTitle>
           <CardDescription>
             <span className='hidden @[540px]/card:block'>
-              Total for the last 3 months
+              Daily dispatched SKU units across Ocean (40HC/45HC), Inland
+              (53FT/40STD), and 20STD/LCL modes
             </span>
-            <span className='@[540px]/card:hidden'>Last 3 months</span>
+            <span className='@[540px]/card:hidden'>
+              Dispatched units by mode
+            </span>
           </CardDescription>
         </div>
         <div className='flex'>
-          {['desktop', 'mobile', 'error'].map((key) => {
-            const chart = key as keyof typeof chartConfig;
-            if (!chart || total[key as keyof typeof total] === 0) return null;
+          {(['desktop', 'mobile', 'lcl'] as const).map((chart) => {
+            if (!chart || total[chart] === 0) return null;
             return (
               <button
                 key={chart}
@@ -186,7 +190,7 @@ export function BarGraph() {
                   {chartConfig[chart].label}
                 </span>
                 <span className='text-lg leading-none font-bold sm:text-3xl'>
-                  {total[key as keyof typeof total]?.toLocaleString()}
+                  {total[chart]?.toLocaleString()}
                 </span>
               </button>
             );
@@ -199,7 +203,7 @@ export function BarGraph() {
           className='aspect-auto h-[250px] w-full'
         >
           <BarChart
-            data={chartData}
+            data={chartDataWithLcl}
             margin={{
               left: 12,
               right: 12

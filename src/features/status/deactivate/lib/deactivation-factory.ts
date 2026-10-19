@@ -1,5 +1,5 @@
 export interface BulkDeactivateInput {
-  hemicode: string;
+  cn_code: string;
   status?: string;
 }
 
@@ -11,9 +11,9 @@ export function createBulkDeactivateData(
   const row = rowIndex + 1;
   const msg = (m: string) => `[Row ${row}] ${m}`;
 
-  // hemicode requerido
-  if (!input.hemicode || input.hemicode.trim() === '') {
-    errors.push(msg("The field 'HEMICODE' is required and cannot be empty."));
+  // cn_code requerido
+  if (!input.cn_code || input.cn_code.trim() === '') {
+    errors.push(msg("The field 'CN_CODE' is required and cannot be empty."));
   }
 
   // Si viene "status", debe NO ser INACTIVE (regla del negocio)

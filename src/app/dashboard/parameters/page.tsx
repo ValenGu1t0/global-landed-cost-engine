@@ -29,7 +29,7 @@ export default function ParametersPage() {
     <PageContainer scrollable={true}>
       <div className='flex flex-1 flex-col space-y-6'>
         {/* Header */}
-        <div className='flex items-start justify-between'>
+        <div className='flex items-center justify-between'>
           <Heading
             title='Global Trade & Landed Cost Parameters'
             description='Enterprise parameters governing tariffs, freight contracts, terminal fees, and multi-variable landed cost calculations.'

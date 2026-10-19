@@ -5,7 +5,7 @@ export interface ProductInput {
   // Identificación y Códigos
   tech_sku_id: number; // serial - PrimaryKey
   hts_category?: string; // varchar(7)
-  hemicode?: string; // varchar(30) - Unique
+  cn_code?: string; // varchar(30) - Unique
   status: string; // varchar(20) - NotNull
   factory_code?: string; // varchar(50)
   factory_mold?: string; // varchar(50)
@@ -128,9 +128,9 @@ export interface ProductInput {
   project_id?: string; // varchar(20)
 }
 
-export interface BulkHemicodeUpdateInput {
-  old_hemicode: string;
-  new_hemicode: string;
+export interface BulkCnCodeUpdateInput {
+  old_cn_code: string;
+  new_cn_code: string;
 }
 
 // Función central de la fábrica: transforma el input de Zod/Formulario a la estructura de Drizzle.
@@ -150,7 +150,7 @@ export function createProductData(
     // String (Varchar)
     status: input.status,
     hts_category: input.hts_category,
-    hemicode: input.hemicode,
+    cn_code: input.cn_code,
     factory_code: input.factory_code,
     factory_mold: input.factory_mold,
     item_upc: input.item_upc,

@@ -6,18 +6,18 @@ import { and, eq, isNotNull } from 'drizzle-orm';
 
 export async function getVendorPrefix(vendor: string): Promise<string | null> {
   const result = await db
-    .select({ hemicode: productTable.hemicode })
+    .select({ cn_code: productTable.cn_code })
     .from(productTable)
     .where(
-      and(eq(productTable.vendor, vendor), isNotNull(productTable.hemicode))
+      and(eq(productTable.vendor, vendor), isNotNull(productTable.cn_code))
     )
     .limit(1);
 
-  const hemicode = result[0]?.hemicode;
+  const cn_code = result[0]?.cn_code;
 
-  if (!hemicode) {
+  if (!cn_code) {
     return null;
   }
 
-  return hemicode.split('-')[0];
+  return cn_code.split('-')[0];
 }

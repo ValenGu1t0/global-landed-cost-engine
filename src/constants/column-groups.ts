@@ -2,7 +2,7 @@ export const COLUMN_GROUPS = {
   default: {
     label: 'Default',
     columns: [
-      'hemicode',
+      'cn_code',
       'status',
       'factory_code',
       'factory_mold',

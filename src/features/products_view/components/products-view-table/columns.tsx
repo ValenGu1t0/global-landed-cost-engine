@@ -124,12 +124,12 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     enableSorting: false
   },
   {
-    accessorKey: 'hemicode',
+    accessorKey: 'cn_code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Hemicode' pin />
+      <DataTableColumnHeader column={column} title='CN-Code' pin />
     ),
     cell: ({ row }) => {
-      return <div className='font-medium'>{row.getValue('hemicode')}</div>;
+      return <div className='font-medium'>{row.getValue('cn_code')}</div>;
     },
     size: 100,
     enableHiding: false

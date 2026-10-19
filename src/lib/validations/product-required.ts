@@ -42,7 +42,7 @@ export const REQUIRED_FIELDS: Record<ProductStatus, string[]> = {
     'hts_category',
     'loading_type',
     'notes',
-    'hemicode',
+    'cn_code',
     'factory_mold',
     'carton_length_mm',
     'carton_height_mm',
@@ -63,7 +63,7 @@ export const REQUIRED_FIELDS: Record<ProductStatus, string[]> = {
     'pieces_per_unit',
     'case_pack',
     'loading_type',
-    'hemicode'
+    'cn_code'
   ],
 
   GS: [

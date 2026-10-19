@@ -1,7 +1,7 @@
 TRUNCATE int.kit_view;
 
 INSERT INTO int.kit_view (
-    tech_sku_id, hemicode, status, image_in_process, factory_code, factory_mold, project_id, item_upc, case_upc, vendor,
+    tech_sku_id, cn_code, status, image_in_process, factory_code, factory_mold, project_id, item_upc, case_upc, vendor,
     brand_name, origin_country, pre_price, factory_name, description, short_description, super_category, category, sub_category,
     consumer_use, set_collection, product_collection, process_type, season, color_family, color_description, pantone_code, 
     tosaf_code, raw_material, finishing, shipping_pack, label, packing, pieces_per_unit, case_pack, pieces_per_carton,
@@ -59,7 +59,7 @@ INSERT INTO int.kit_view (
 )
 SELECT 
     k.tech_sku_id,
-    k.hemicode,
+    k.cn_code,
     k.status,
     k.image_in_process,
     k.factory_code,

@@ -14,7 +14,7 @@ export default async function Page(props: PageProps) {
 
   return (
     <PageContainer scrollable>
-      <div className='flex-1 space-y-4'>
+      <div className='flex-1 gap-4'>
         <Suspense fallback={<ProductViewSkeleton />}>
           <InlandParameterViewPage id={params.id} />
         </Suspense>

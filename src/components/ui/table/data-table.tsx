@@ -32,7 +32,7 @@ export function DataTable<TData>({
           <DataTableViewOptions table={table} />
         </div>
       ) : (
-        <div className='absolute -top-[3.25rem] right-0 z-10 flex h-9 items-center gap-2'>
+        <div className='absolute -top-13 right-0 z-10 flex h-9 items-center gap-2'>
           <DataTableViewOptions table={table} />
         </div>
       )}

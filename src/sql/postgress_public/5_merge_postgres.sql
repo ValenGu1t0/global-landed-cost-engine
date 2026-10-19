@@ -6,7 +6,7 @@ USING (
 ON T.tech_sku_id = S.tech_sku_id
 
 WHEN MATCHED AND (
-       T.hemicode IS DISTINCT FROM S.hemicode
+       T.cn_code IS DISTINCT FROM S.cn_code
     OR T."status" IS DISTINCT FROM S."status"
     OR T.image_in_process IS DISTINCT FROM S.image_in_process
     OR T.factory_code IS DISTINCT FROM S.factory_code
@@ -173,7 +173,7 @@ WHEN MATCHED AND (
 )
 
 THEN UPDATE SET
-    hemicode = S.hemicode,
+    cn_code = S.cn_code,
     "status" = S."status",
     image_in_process = S.image_in_process,
     factory_code = S.factory_code,

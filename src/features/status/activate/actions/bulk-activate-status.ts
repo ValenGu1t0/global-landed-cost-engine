@@ -64,9 +64,9 @@ export const bulkActivateStatus = authActionClient
         );
       }
 
-      // Hemicode
-      if (!isPresent(product.hemicode)) {
-        allErrors.push(`${prefix} Hemicode is missing.`);
+      // CN-Code
+      if (!isPresent(product.cn_code)) {
+        allErrors.push(`${prefix} CN-Code is missing.`);
       }
     });
 

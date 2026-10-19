@@ -30,7 +30,7 @@ LEFT JOIN int.vendor_main_port op
    AND UPPER(op.vendor) = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
     ON UPPER(dp.country) = 'UNITED STATES'
-   AND UPPER(dp.vendor) = 'HEMISPHERE'
+   AND UPPER(dp.vendor) = 'CONNECTAR'
 LEFT JOIN public.ocean_freights_parameters ofp
     ON UPPER(ofp.origin_country) = UPPER(p.origin_country)
    AND UPPER(ofp.destination_country) = 'UNITED STATES'
@@ -84,7 +84,7 @@ LEFT JOIN int.vendor_main_port op
    AND UPPER(op.vendor) = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
     ON UPPER(dp.country) = 'UNITED STATES'
-   AND UPPER(dp.vendor) = 'HEMISPHERE'
+   AND UPPER(dp.vendor) = 'CONNECTAR'
 LEFT JOIN public.ocean_freights_parameters ofp
     ON UPPER(ofp.origin_country) = UPPER(p.origin_country)
    AND UPPER(ofp.destination_country) = 'UNITED STATES'
@@ -139,7 +139,7 @@ LEFT JOIN int.vendor_main_port op
    AND UPPER(op.vendor) = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
     ON UPPER(dp.country) = 'UNITED STATES'
-   AND UPPER(dp.vendor) = 'HEMISPHERE'
+   AND UPPER(dp.vendor) = 'CONNECTAR'
 LEFT JOIN public.ocean_freights_parameters ofp
     ON UPPER(ofp.origin_country) = UPPER(p.origin_country)
    AND UPPER(ofp.destination_country) = 'UNITED STATES'
@@ -194,7 +194,7 @@ LEFT JOIN int.vendor_main_port op
    AND UPPER(op.vendor) = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
     ON UPPER(dp.country) = 'UNITED STATES'
-   AND UPPER(dp.vendor) = 'HEMISPHERE'
+   AND UPPER(dp.vendor) = 'CONNECTAR'
 LEFT JOIN public.ocean_freights_parameters ofp
     ON UPPER(ofp.origin_country) = UPPER(p.origin_country)
    AND UPPER(ofp.destination_country) = 'UNITED STATES'
@@ -249,7 +249,7 @@ LEFT JOIN int.vendor_main_port op
    AND UPPER(op.vendor) = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
     ON UPPER(dp.country) = 'UNITED STATES'
-   AND UPPER(dp.vendor) = 'HEMISPHERE'
+   AND UPPER(dp.vendor) = 'CONNECTAR'
 LEFT JOIN public.ocean_freights_parameters ofp
     ON UPPER(ofp.origin_country) = UPPER(p.origin_country)
    AND UPPER(ofp.destination_country) = 'UNITED STATES'

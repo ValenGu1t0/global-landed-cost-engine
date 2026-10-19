@@ -118,7 +118,7 @@ async function seed() {
   const sampleProducts = [
     {
       tech_sku_id: 1001,
-      hemicode: 'SKU-1001',
+      cn_code: 'SKU-1001',
       status: 'ACTIVE',
       vendor: 'EastCraft Sourcing',
       brand_name: 'Nordic Artisans',
@@ -150,7 +150,7 @@ async function seed() {
     },
     {
       tech_sku_id: 1002,
-      hemicode: 'SKU-1002',
+      cn_code: 'SKU-1002',
       status: 'ACTIVE',
       vendor: 'AeroThermal Co',
       brand_name: 'HydroPro Gear',
@@ -183,7 +183,7 @@ async function seed() {
     },
     {
       tech_sku_id: 1003,
-      hemicode: 'SKU-1003',
+      cn_code: 'SKU-1003',
       status: 'ACTIVE',
       vendor: 'GreenRoot Manufacturing',
       brand_name: 'PureKitchen',
@@ -216,7 +216,7 @@ async function seed() {
     },
     {
       tech_sku_id: 1004,
-      hemicode: 'SKU-1004',
+      cn_code: 'SKU-1004',
       status: 'ACTIVE',
       vendor: 'Apex Cookware Ltd',
       brand_name: 'ChefPrecision',
@@ -249,7 +249,7 @@ async function seed() {
     },
     {
       tech_sku_id: 1005,
-      hemicode: 'SKU-1005',
+      cn_code: 'SKU-1005',
       status: 'PROJECT',
       vendor: 'Nordic Living Essentials',
       brand_name: 'OrganizeIt',
@@ -290,7 +290,7 @@ async function seed() {
       .insert(productTable)
       .values({
         tech_sku_id: prod.tech_sku_id,
-        hemicode: prod.hemicode,
+        cn_code: prod.cn_code,
         status: prod.status,
         vendor: prod.vendor,
         brand_name: prod.brand_name,
@@ -316,7 +316,7 @@ async function seed() {
       .onConflictDoUpdate({
         target: productTable.tech_sku_id,
         set: {
-          hemicode: prod.hemicode,
+          cn_code: prod.cn_code,
           status: prod.status,
           description: prod.description,
           vendor: prod.vendor
@@ -328,7 +328,7 @@ async function seed() {
       .insert(productViewTable)
       .values({
         tech_sku_id: prod.tech_sku_id,
-        hemicode: prod.hemicode,
+        cn_code: prod.cn_code,
         status: prod.status,
         vendor: prod.vendor,
         brand_name: prod.brand_name,
@@ -364,7 +364,7 @@ async function seed() {
       .onConflictDoUpdate({
         target: productViewTable.tech_sku_id,
         set: {
-          hemicode: prod.hemicode,
+          cn_code: prod.cn_code,
           status: prod.status,
           description: prod.description,
           vendor: prod.vendor,
@@ -376,7 +376,7 @@ async function seed() {
       });
 
     console.log(
-      `✓ [${prod.hemicode}] ${prod.short_description}: FOB $${prod.fob_current_cost_value} -> Landed Cost (40HC): $${economics.landed_cost_40hc} (${economics.optimal_pieces_per_40hc} pcs/container)`
+      `✓ [${prod.cn_code}] ${prod.short_description}: FOB $${prod.fob_current_cost_value} -> Landed Cost (40HC): $${economics.landed_cost_40hc} (${economics.optimal_pieces_per_40hc} pcs/container)`
     );
   }
 

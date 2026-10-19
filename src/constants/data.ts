@@ -166,8 +166,8 @@ export const navItems: NavItem[] = [
         shortcut: ['', '']
       },
       {
-        title: 'Hemicode',
-        url: '/dashboard/edit/hemicode',
+        title: 'CN-Code',
+        url: '/dashboard/edit/cn_code',
         icon: 'barcode',
         shortcut: ['', '']
       },

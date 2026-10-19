@@ -15,9 +15,9 @@ import { DataTableFacetedFilter } from '@/components/ui/table/data-table-faceted
 export function DeactivateStatusFilters() {
   const { startTransition } = useTransitionContext();
 
-  const [hemicode, setHemicode] = useDebouncedQueryState(
-    'hemicode',
-    deactivateStatusSearchParams.hemicode,
+  const [cn_code, setCnCode] = useDebouncedQueryState(
+    'cn_code',
+    deactivateStatusSearchParams.cn_code,
     {
       startTransition,
       shallow: false,
@@ -55,10 +55,8 @@ export function DeactivateStatusFilters() {
       }));
   }, [statuses]);
 
-  const handleHemicodeChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ): void => {
-    setHemicode(e.target?.value || null);
+  const handleCnCodeChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setCnCode(e.target?.value || null);
     if (page !== 1) setPage(1);
   };
 
@@ -86,19 +84,19 @@ export function DeactivateStatusFilters() {
 
   const handleResetFilters = (): void => {
     setPage(1);
-    setHemicode(null);
+    setCnCode(null);
     setStatus(null);
   };
 
-  const hasActiveFilters = hemicode !== null || status !== null;
+  const hasActiveFilters = cn_code !== null || status !== null;
 
   return (
     <div className='flex w-full items-center gap-2'>
       <div className='flex flex-1 flex-wrap items-center gap-2'>
         <Input
-          placeholder='Search hemicodes...'
-          value={hemicode || ''}
-          onChange={handleHemicodeChange}
+          placeholder='Search cn_codes...'
+          value={cn_code || ''}
+          onChange={handleCnCodeChange}
           className='h-9 w-40 lg:w-56'
         />
 

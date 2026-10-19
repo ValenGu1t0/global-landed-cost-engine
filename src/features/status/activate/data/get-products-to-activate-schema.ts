@@ -8,7 +8,7 @@ export const getProductsToActivateSchema = z.object({
   sortDirection: z.enum(['asc', 'desc']).optional(),
   ids: z.array(z.number()).optional(),
   columns: z.array(z.string()).optional(),
-  hemicode: z.string().optional(),
+  cn_code: z.string().optional(),
   status: z.array(z.enum(['INACTIVE', 'PROJECT', 'GS'])).optional()
 });
 

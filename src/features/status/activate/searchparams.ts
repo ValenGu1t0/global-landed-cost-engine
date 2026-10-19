@@ -11,7 +11,7 @@ export const activateStatusSearchParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(10),
 
-  hemicode: parseAsString,
+  cn_code: parseAsString,
 
   status: parseAsArrayOf(parseAsStringEnum(['INACTIVE', 'PROJECT', 'GS'])),
 

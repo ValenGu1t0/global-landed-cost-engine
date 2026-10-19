@@ -10,7 +10,7 @@ export const metadata = {
 export default async function Page() {
   return (
     <PageContainer scrollable>
-      <div className='flex-1 space-y-4'>
+      <div className='flex-1 gap-4'>
         <Suspense fallback={<ProductNewSkeleton />}>
           <OceanFreightNewPage />
         </Suspense>

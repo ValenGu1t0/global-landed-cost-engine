@@ -42,17 +42,17 @@ export const addProduct = authActionClient
       ...productDataInput
     } = parsedInput;
 
-    // Validar hemicode repetido
-    if (parsedInput.hemicode) {
+    // Validar cn_code repetido
+    if (parsedInput.cn_code) {
       const repeatedProduct = await db
         .select()
         .from(productTable)
-        .where(eq(productTable.hemicode, parsedInput.hemicode))
+        .where(eq(productTable.cn_code, parsedInput.cn_code))
         .limit(1);
 
       if (repeatedProduct.length > 0) {
         throw new Error(
-          `Product with this hemicode already exists: ${parsedInput.hemicode}`
+          `Product with this cn_code already exists: ${parsedInput.cn_code}`
         );
       }
     }
@@ -63,35 +63,35 @@ export const addProduct = authActionClient
       .values(productDataInput)
       .returning({
         id: productTable.tech_sku_id,
-        hemicode: productTable.hemicode,
+        cn_code: productTable.cn_code,
         status: productTable.status,
         vendor: productTable.vendor
       });
 
     const techSkuId = newProduct.id;
-    let finalHemicode = newProduct.hemicode;
+    let finalCnCode = newProduct.cn_code;
 
-    //If the product is a project without hemicode, assign one by default
-    if (newProduct.status === 'PROJECT' && !finalHemicode) {
-      finalHemicode = `PROJ-${techSkuId}`;
+    //If the product is a project without cn_code, assign one by default
+    if (newProduct.status === 'PROJECT' && !finalCnCode) {
+      finalCnCode = `PROJ-${techSkuId}`;
       await db
         .update(productTable)
-        .set({ hemicode: finalHemicode })
+        .set({ cn_code: finalCnCode })
         .where(eq(productTable.tech_sku_id, techSkuId));
     }
 
-    if (newProduct.status === 'GS' && !finalHemicode) {
+    if (newProduct.status === 'GS' && !finalCnCode) {
       let vendorPrefix = await getVendorPrefix(newProduct.vendor);
 
       if (!vendorPrefix) {
         vendorPrefix = 'AUX';
       }
 
-      finalHemicode = `GS-${vendorPrefix}-${techSkuId}`;
+      finalCnCode = `GS-${vendorPrefix}-${techSkuId}`;
 
       await db
         .update(productTable)
-        .set({ hemicode: finalHemicode })
+        .set({ cn_code: finalCnCode })
         .where(eq(productTable.tech_sku_id, techSkuId));
     }
 
@@ -133,7 +133,7 @@ export const addProduct = authActionClient
     const economics = calculateProductEconomics({
       ...productDataInput,
       tech_sku_id: techSkuId,
-      hemicode: finalHemicode,
+      cn_code: finalCnCode,
       status: newProduct.status,
       vendor: newProduct.vendor,
       fob_current_cost_value: parsedInput.fob,
@@ -146,7 +146,7 @@ export const addProduct = authActionClient
 
     await db.insert(productViewTable).values({
       tech_sku_id: techSkuId,
-      hemicode: finalHemicode,
+      cn_code: finalCnCode,
       status: newProduct.status,
       vendor: newProduct.vendor,
       brand_name: productDataInput.brand_name,
@@ -183,7 +183,7 @@ export const addProduct = authActionClient
     return {
       message: 'Product created successfully',
       newProductId: newProduct.id,
-      newProductHemicode: newProduct.hemicode,
+      newProductCnCode: newProduct.cn_code,
       historicCostsInserted: historicCostValues.length
     };
   });

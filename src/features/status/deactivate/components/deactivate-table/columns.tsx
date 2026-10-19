@@ -38,9 +38,9 @@ export const columns: ColumnDef<ProductTable>[] = [
     maxSize: 40
   },
   {
-    accessorKey: 'hemicode',
+    accessorKey: 'cn_code',
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title='Hemicode' pin={false} />
+      <DataTableColumnHeader column={column} title='CN-Code' pin={false} />
     ),
     size: 100,
     enableHiding: false

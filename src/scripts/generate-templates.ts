@@ -9,7 +9,7 @@ if (!fs.existsSync(templatesDir)) {
 
 // 1. Template: Bulk Add Products (Active)
 const bulkAddHeaders = [
-  'hemicode',
+  'cn_code',
   'origin_country',
   'vendor',
   'factory_name',
@@ -105,9 +105,9 @@ XLSX.writeFile(
   path.join(templatesDir, 'template_bulk_add_products.xlsx')
 );
 
-// 2. Template: Bulk Update SKU / Hemicode
+// 2. Template: Bulk Update SKU / CN-Code
 const updateSkuData = [
-  ['old_hemicode', 'new_hemicode'],
+  ['old_cn_code', 'new_cn_code'],
   ['OLD-SKU-9901', 'NEW-SKU-9901'],
   ['OLD-SKU-9902', 'NEW-SKU-9902']
 ];
@@ -119,7 +119,7 @@ XLSX.writeFile(wbSku, path.join(templatesDir, 'template_update_sku.xlsx'));
 // 3. Template: Bulk Update Attributes
 const updateAttributesData = [
   [
-    'hemicode',
+    'cn_code',
     'description',
     'vendor',
     'brand_name',
@@ -167,7 +167,7 @@ XLSX.writeFile(
 );
 
 // 4. Template: Status Change (Activation / Deactivation)
-const statusData = [['hemicode'], ['SKU-1001'], ['SKU-1002']];
+const statusData = [['cn_code'], ['SKU-1001'], ['SKU-1002']];
 const wsStatus = XLSX.utils.aoa_to_sheet(statusData);
 const wbStatus = XLSX.utils.book_new();
 XLSX.utils.book_append_sheet(wbStatus, wsStatus, 'Status');

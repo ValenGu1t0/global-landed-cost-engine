@@ -91,43 +91,43 @@ export const bulkAddInactiveProducts = authActionClient
     /* --------------------- VALIDACIONES --------------------- */
     let allErrors: string[] = [];
 
-    const hemicodesFromFile = data
-      .map((product) => (product as any).hemicode)
+    const cnCodesFromFile = data
+      .map((product) => (product as any).cn_code)
       .filter((h): h is string => typeof h === 'string' && h.trim() !== '');
 
-    if (hemicodesFromFile.length === 0) {
-      allErrors.push("Couldn't find any valid hemicodes.");
+    if (cnCodesFromFile.length === 0) {
+      allErrors.push("Couldn't find any valid cn_codes.");
     }
 
-    const uniqueHemicodes = new Set<string>();
-    const duplicateHemicodes: string[] = [];
+    const uniqueCnCodes = new Set<string>();
+    const duplicateCnCodes: string[] = [];
 
-    for (const code of hemicodesFromFile) {
-      if (uniqueHemicodes.has(code)) {
-        if (!duplicateHemicodes.includes(code)) {
-          duplicateHemicodes.push(code);
+    for (const code of cnCodesFromFile) {
+      if (uniqueCnCodes.has(code)) {
+        if (!duplicateCnCodes.includes(code)) {
+          duplicateCnCodes.push(code);
         }
       } else {
-        uniqueHemicodes.add(code);
+        uniqueCnCodes.add(code);
       }
     }
 
-    if (duplicateHemicodes.length > 0) {
+    if (duplicateCnCodes.length > 0) {
       allErrors.push(
-        `The following hemicodes are repeated inside the file: ${duplicateHemicodes.join(', ')}`
+        `The following cn_codes are repeated inside the file: ${duplicateCnCodes.join(', ')}`
       );
     }
 
-    if (uniqueHemicodes.size > 0) {
+    if (uniqueCnCodes.size > 0) {
       const existingProducts = await db
-        .select({ hemicode: productTable.hemicode })
+        .select({ cn_code: productTable.cn_code })
         .from(productTable)
-        .where(inArray(productTable.hemicode, Array.from(uniqueHemicodes)));
+        .where(inArray(productTable.cn_code, Array.from(uniqueCnCodes)));
 
       if (existingProducts.length > 0) {
-        const existingHemicodes = existingProducts.map((p) => p.hemicode);
+        const existingCnCodes = existingProducts.map((p) => p.cn_code);
         allErrors.push(
-          `The following hemicodes already exist in the database: ${existingHemicodes.join(', ')}`
+          `The following cn_codes already exist in the database: ${existingCnCodes.join(', ')}`
         );
       }
     }
@@ -219,8 +219,8 @@ export const bulkAddInactiveProducts = authActionClient
         .values(productsToInsert)
         .returning();
 
-      const techIdByHemicode = new Map(
-        insertedProducts.map((p) => [p.hemicode, p.tech_sku_id])
+      const techIdByCnCode = new Map(
+        insertedProducts.map((p) => [p.cn_code, p.tech_sku_id])
       );
 
       const historicCostsToInsert: Array<
@@ -228,7 +228,7 @@ export const bulkAddInactiveProducts = authActionClient
       > = [];
 
       for (const product of data) {
-        const techId = techIdByHemicode.get((product as any).hemicode);
+        const techId = techIdByCnCode.get((product as any).cn_code);
         if (!techId) continue;
 
         for (const key of Object.keys(COST_MAP) as Array<

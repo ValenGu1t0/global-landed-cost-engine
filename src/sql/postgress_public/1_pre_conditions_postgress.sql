@@ -627,7 +627,7 @@ DROP TABLE IF EXISTS int.estimated_optimal_cpap;
 
 CREATE TABLE int.estimated_optimal_cpap AS
 SELECT 
-    p.hemicode,
+    p.cn_code,
     p.tech_sku_id,
     CASE 
         WHEN (bd.carton_weight_lb * op.optimal_carton_per_pallet * 30) >= 29000 
@@ -1047,7 +1047,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
   AND gf.origin_country = p.origin_country
   AND gf.container_type = '40HC'
   AND gf.destination_country = 'UNITED STATES'
-  AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+  AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_40hc c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -1068,7 +1068,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
   AND gf.origin_country = p.origin_country
   AND gf.container_type = '45HC'
   AND gf.destination_country = 'UNITED STATES'
-  AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+  AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_45hc c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -1089,7 +1089,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
   AND gf.origin_country = p.origin_country
   AND gf.container_type = '40STD'
   AND gf.destination_country = 'UNITED STATES'
-  AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+  AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_40std c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -1111,7 +1111,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
   AND gf.origin_country = p.origin_country
   AND gf.container_type = '20STD'
   AND gf.destination_country = 'UNITED STATES'
-  AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+  AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_20std c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -1133,7 +1133,7 @@ LEFT JOIN int.vigent_ground_freights_parameters gf
   AND gf.origin_country = p.origin_country
   AND gf.container_type = '53FT'
   AND gf.destination_country = 'UNITED STATES'
-  AND gf.destination_warehouse = 'HEMISPHERE 11722NY'
+  AND gf.destination_warehouse = 'CONNECTAR 11722NY'
 LEFT JOIN int.calc_53ft c40 
   ON c40.tech_sku_id = p.tech_sku_id;
 
@@ -1181,7 +1181,7 @@ LEFT JOIN int.vendor_main_port op
     AND op.vendor  = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp  
     ON dp.country = 'UNITED STATES'
-    AND dp.vendor  = 'HEMISPHERE'
+    AND dp.vendor  = 'CONNECTAR'
 LEFT JOIN dev.ocean_freights_parameters ofp
     ON ofp.origin_country       = p.origin_country
     AND ofp.destination_country = 'UNITED STATES'
@@ -1247,7 +1247,7 @@ LEFT JOIN int.vendor_main_port op
     AND op.vendor  = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp  
     ON dp.country = 'UNITED STATES'
-    AND dp.vendor  = 'HEMISPHERE'
+    AND dp.vendor  = 'CONNECTAR'
 LEFT JOIN dev.ocean_freights_parameters ofp
     ON ofp.origin_country       = p.origin_country
     AND ofp.destination_country = 'UNITED STATES'
@@ -1312,7 +1312,7 @@ LEFT JOIN int.vendor_main_port op
  AND op.vendor  = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
   ON dp.country = 'UNITED STATES'
- AND dp.vendor  = 'HEMISPHERE'
+ AND dp.vendor  = 'CONNECTAR'
 LEFT JOIN dev.ocean_freights_parameters ofp
   ON ofp.origin_country       = p.origin_country
  AND ofp.destination_country  = 'UNITED STATES'
@@ -1378,7 +1378,7 @@ LEFT JOIN int.vendor_main_port op
  AND op.vendor  = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
   ON dp.country = 'UNITED STATES'
- AND dp.vendor  = 'HEMISPHERE'
+ AND dp.vendor  = 'CONNECTAR'
 LEFT JOIN dev.ocean_freights_parameters ofp
   ON ofp.origin_country      = p.origin_country
  AND ofp.destination_country = 'UNITED STATES'
@@ -1443,7 +1443,7 @@ LEFT JOIN int.vendor_main_port op
  AND op.vendor  = UPPER(p.vendor)
 LEFT JOIN int.vendor_main_port dp
   ON dp.country = 'UNITED STATES'
- AND dp.vendor  = 'HEMISPHERE'
+ AND dp.vendor  = 'CONNECTAR'
 LEFT JOIN dev.ocean_freights_parameters ofp
   ON ofp.origin_country       = p.origin_country
  AND ofp.destination_country  = 'UNITED STATES'

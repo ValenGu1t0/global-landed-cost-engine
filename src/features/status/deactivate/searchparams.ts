@@ -9,7 +9,7 @@ import {
 export const deactivateStatusSearchParams = {
   page: parseAsInteger.withDefault(1),
   perPage: parseAsInteger.withDefault(10),
-  hemicode: parseAsString,
+  cn_code: parseAsString,
   status: parseAsString,
   sortBy: parseAsString,
   sortDirection: parseAsStringEnum(['asc', 'desc'])

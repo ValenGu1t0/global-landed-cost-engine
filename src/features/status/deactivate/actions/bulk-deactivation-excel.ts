@@ -41,8 +41,8 @@ export const bulkDeactivationExcel = authActionClient
     const rows = XLSX.utils.sheet_to_json<string[]>(worksheet, { header: 1 });
     const headerRow = rows[0].map((h) => String(h).trim());
 
-    // Solo importa hemicode + status
-    const requiredColumns = ['hemicode'];
+    // Solo importa cn_code + status
+    const requiredColumns = ['cn_code'];
 
     const missing = requiredColumns.filter((col) => !headerRow.includes(col));
     if (missing.length > 0) {
@@ -57,23 +57,23 @@ export const bulkDeactivationExcel = authActionClient
 
     // ---------- VALIDACIONES ----------
     const errors: string[] = [];
-    const hemicodes: string[] = [];
+    const cn_codes: string[] = [];
 
     for (let i = 0; i < data.length; i++) {
       const row = data[i];
       const rowIndex = i + 2; // Excel rows start at 2
 
-      const hemicode = String(row.hemicode || '').trim();
+      const cn_code = String(row.cn_code || '').trim();
 
-      // Hemicode vacío
-      if (!hemicode) {
-        errors.push(`[Row ${rowIndex}] hemicode cannot be empty.`);
+      // CN-Code vacío
+      if (!cn_code) {
+        errors.push(`[Row ${rowIndex}] cn_code cannot be empty.`);
         continue;
       }
-      hemicodes.push(hemicode);
+      cn_codes.push(cn_code);
     }
 
-    const duplicates = hemicodes.filter((h, i) => hemicodes.indexOf(h) !== i);
+    const duplicates = cn_codes.filter((h, i) => cn_codes.indexOf(h) !== i);
 
     if (duplicates.length > 0) {
       const seen: Record<string, boolean> = {};
@@ -84,7 +84,7 @@ export const bulkDeactivationExcel = authActionClient
       });
 
       errors.push(
-        `The following hemicodes are duplicated inside the Excel: ${uniqueDuplicates.join(', ')}`
+        `The following cn_codes are duplicated inside the Excel: ${uniqueDuplicates.join(', ')}`
       );
     }
 
@@ -99,39 +99,39 @@ export const bulkDeactivationExcel = authActionClient
 
     // ---------- VALIDAR QUE EXISTEN EN DB ----------
     const existing = await db
-      .select({ hemicode: productTable.hemicode })
+      .select({ cn_code: productTable.cn_code })
       .from(productTable)
-      .where(inArray(productTable.hemicode, hemicodes));
+      .where(inArray(productTable.cn_code, cn_codes));
 
-    const existingHemicodes = existing.map((e) => e.hemicode);
-    const missingInDb = hemicodes.filter((h) => !existingHemicodes.includes(h));
+    const existingCnCodes = existing.map((e) => e.cn_code);
+    const missingInDb = cn_codes.filter((h) => !existingCnCodes.includes(h));
 
     if (missingInDb.length > 0) {
       return {
         success: false,
-        message: 'Some hemicodes do not exist in the database.',
-        errors: [`Hemicodes not found in DB: ${missingInDb.join(', ')}`]
+        message: 'Some cn_codes do not exist in the database.',
+        errors: [`CN-Codes not found in DB: ${missingInDb.join(', ')}`]
       };
     }
 
     const inactiveProducts = await db
-      .select({ hemicode: productTable.hemicode })
+      .select({ cn_code: productTable.cn_code })
       .from(productTable)
       .where(
         and(
-          inArray(productTable.hemicode, hemicodes),
+          inArray(productTable.cn_code, cn_codes),
           eq(productTable.status, 'INACTIVE')
         )
       );
 
     if (inactiveProducts.length > 0) {
-      const inactiveHemicodes = inactiveProducts.map((p) => p.hemicode);
+      const inactiveCnCodes = inactiveProducts.map((p) => p.cn_code);
 
       return {
         success: false,
         message: 'Some products are already inactive.',
         errors: [
-          `The following hemicodes are already INACTIVE: ${inactiveHemicodes.join(', ')}`
+          `The following cn_codes are already INACTIVE: ${inactiveCnCodes.join(', ')}`
         ]
       };
     }
@@ -141,7 +141,7 @@ export const bulkDeactivationExcel = authActionClient
       await tx
         .update(productTable)
         .set({ status: 'INACTIVE' })
-        .where(inArray(productTable.hemicode, hemicodes));
+        .where(inArray(productTable.cn_code, cn_codes));
     });
 
     // Recompute product economics with the deterministic engine
@@ -162,7 +162,7 @@ export const bulkDeactivationExcel = authActionClient
 
     return {
       success: true,
-      message: `${hemicodes.length} products successfully deactivated!`,
+      message: `${cn_codes.length} products successfully deactivated!`,
       errors: []
     };
   });

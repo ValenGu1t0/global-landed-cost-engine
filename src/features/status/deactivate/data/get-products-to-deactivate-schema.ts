@@ -8,7 +8,7 @@ export const getProductsToDeactivateSchema = z.object({
   sortDirection: z.enum(['asc', 'desc']).optional(),
   ids: z.array(z.number()).optional(),
   columns: z.array(z.string()).optional(),
-  hemicode: z.string().optional(),
+  cn_code: z.string().optional(),
   status: z.string().optional()
 });
 

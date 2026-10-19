@@ -65,7 +65,7 @@ export const bulkUpdateAtributes = authActionClient
 
     let allErrors: string[] = [];
     const EXCLUDED_COLUMNS = ['tech_sku_id', 'image', 'status'];
-    const REQUIRED_UPDATE_COLUMNS = ['hemicode'];
+    const REQUIRED_UPDATE_COLUMNS = ['cn_code'];
 
     /* --------------------- VALIDACIÓN HEADERS Y FORMATO --------------------- */
 
@@ -79,9 +79,9 @@ export const bulkUpdateAtributes = authActionClient
       );
     }
 
-    // Columna 'hemicode' DEBE estar presente.
-    if (!headerRow.includes('hemicode')) {
-      allErrors.push(`The column 'hemicode' is required for the update.`);
+    // Columna 'cn_code' DEBE estar presente.
+    if (!headerRow.includes('cn_code')) {
+      allErrors.push(`The column 'cn_code' is required for the update.`);
     }
 
     // Si hay errores de headers, detener antes de procesar data.
@@ -95,44 +95,44 @@ export const bulkUpdateAtributes = authActionClient
 
     /* --------------------- VALIDACIONES DE DATOS (Filas) --------------------- */
 
-    const hemicodesFromFile = data
-      .map((product) => (product as any).hemicode)
+    const cnCodesFromFile = data
+      .map((product) => (product as any).cn_code)
       .filter((h): h is string => typeof h === 'string' && h.trim() !== '');
 
-    // Columna 'hemicode' debe estar completa (no null/vacía)
-    if (hemicodesFromFile.length !== data.length) {
-      const emptyHemicodeRows = data.reduce((acc, product, index) => {
-        const hemicode = (product as any).hemicode;
-        if (!isPresent(hemicode)) {
+    // Columna 'cn_code' debe estar completa (no null/vacía)
+    if (cnCodesFromFile.length !== data.length) {
+      const emptyCnCodeRows = data.reduce((acc, product, index) => {
+        const cn_code = (product as any).cn_code;
+        if (!isPresent(cn_code)) {
           acc.push(index + 2);
         }
         return acc;
       }, [] as number[]);
 
-      if (emptyHemicodeRows.length > 0) {
+      if (emptyCnCodeRows.length > 0) {
         allErrors.push(
-          `The 'hemicode' is required and cannot be empty in rows: ${emptyHemicodeRows.join(', ')}`
+          `The 'cn_code' is required and cannot be empty in rows: ${emptyCnCodeRows.join(', ')}`
         );
       }
     }
 
-    // No puede haber hemicodes duplicados adentro del Excel.
-    const uniqueHemicodes = new Set<string>();
-    const duplicateHemicodes: string[] = [];
+    // No puede haber cn_codes duplicados adentro del Excel.
+    const uniqueCnCodes = new Set<string>();
+    const duplicateCnCodes: string[] = [];
 
-    for (const code of hemicodesFromFile) {
-      if (uniqueHemicodes.has(code)) {
-        if (!duplicateHemicodes.includes(code)) {
-          duplicateHemicodes.push(code);
+    for (const code of cnCodesFromFile) {
+      if (uniqueCnCodes.has(code)) {
+        if (!duplicateCnCodes.includes(code)) {
+          duplicateCnCodes.push(code);
         }
       } else {
-        uniqueHemicodes.add(code);
+        uniqueCnCodes.add(code);
       }
     }
 
-    if (duplicateHemicodes.length > 0) {
+    if (duplicateCnCodes.length > 0) {
       allErrors.push(
-        `The following hemicodes are repeated inside the file: ${duplicateHemicodes.join(', ')}`
+        `The following cn_codes are repeated inside the file: ${duplicateCnCodes.join(', ')}`
       );
     }
 
@@ -144,36 +144,36 @@ export const bulkUpdateAtributes = authActionClient
       };
     }
 
-    // Todos los hemicodes presentes en el Excel deben existir en la DB.
+    // Todos los cn_codes presentes en el Excel deben existir en la DB.
     let existingProductsMap: Map<
       string,
       Pick<ProductTable, 'tech_sku_id' | 'status'>
     > = new Map();
-    const hemicodesArray = Array.from(uniqueHemicodes);
+    const cnCodesArray = Array.from(uniqueCnCodes);
 
-    if (hemicodesArray.length > 0) {
+    if (cnCodesArray.length > 0) {
       const existingProducts = await db
         .select({
-          hemicode: productTable.hemicode,
+          cn_code: productTable.cn_code,
           tech_sku_id: productTable.tech_sku_id,
           status: productTable.status
         })
         .from(productTable)
-        .where(inArray(productTable.hemicode, hemicodesArray));
+        .where(inArray(productTable.cn_code, cnCodesArray));
 
-      const existingHemicodes = existingProducts.map((p) => p.hemicode);
-      const nonExistingHemicodes = hemicodesArray.filter(
-        (h) => !existingHemicodes.includes(h)
+      const existingCnCodes = existingProducts.map((p) => p.cn_code);
+      const nonExistingCnCodes = cnCodesArray.filter(
+        (h) => !existingCnCodes.includes(h)
       );
 
-      if (nonExistingHemicodes.length > 0) {
+      if (nonExistingCnCodes.length > 0) {
         allErrors.push(
-          `The following hemicodes do not exist in the database: ${nonExistingHemicodes.join(', ')}`
+          `The following cn_codes do not exist in the database: ${nonExistingCnCodes.join(', ')}`
         );
       }
 
       existingProducts.forEach((p) => {
-        existingProductsMap.set(p.hemicode!, {
+        existingProductsMap.set(p.cn_code!, {
           tech_sku_id: p.tech_sku_id,
           status: p.status
         });
@@ -193,10 +193,10 @@ export const bulkUpdateAtributes = authActionClient
     data.forEach((product, index) => {
       const row = index + 2; // Fila de Excel
       const msg = (m: string) => `[Row ${row}] ${m}`;
-      const hemicode = (product as any).hemicode;
+      const cn_code = (product as any).cn_code;
 
       // Obtener el status de la DB para la validación de campos obligatorios
-      const dbProduct = existingProductsMap.get(hemicode);
+      const dbProduct = existingProductsMap.get(cn_code);
       const currentStatus = dbProduct?.status ?? 'UNKNOWN'; // Usar un default seguro
 
       // Validaciones de campos obligatorios basadas en el status actual de la DB
@@ -274,7 +274,7 @@ export const bulkUpdateAtributes = authActionClient
 
     // Objeto para almacenar los updates de productos
     const productsToUpdate: {
-      hemicode: string;
+      cn_code: string;
       data: Partial<ProductTable>;
     }[] = [];
 
@@ -302,8 +302,8 @@ export const bulkUpdateAtributes = authActionClient
     );
 
     for (const productRow of data) {
-      const hemicode = (productRow as any).hemicode;
-      const dbProduct = existingProductsMap.get(hemicode)!; // Ya validado que existe
+      const cn_code = (productRow as any).cn_code;
+      const dbProduct = existingProductsMap.get(cn_code)!; // Ya validado que existe
       const techId = dbProduct.tech_sku_id;
 
       const updateData: Partial<ProductTable> = {};
@@ -339,7 +339,7 @@ export const bulkUpdateAtributes = authActionClient
       }
 
       if (Object.keys(updateData).length > 0) {
-        productsToUpdate.push({ hemicode, data: updateData });
+        productsToUpdate.push({ cn_code, data: updateData });
       }
 
       // Procesar costos para historial
@@ -371,7 +371,7 @@ export const bulkUpdateAtributes = authActionClient
         await tx
           .update(productTable)
           .set(update.data)
-          .where(eq(productTable.hemicode, update.hemicode));
+          .where(eq(productTable.cn_code, update.cn_code));
       }
 
       // Procesar historial de costos

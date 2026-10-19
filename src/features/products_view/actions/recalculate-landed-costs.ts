@@ -143,7 +143,7 @@ export async function recalculateLandedCostsAction(): Promise<RecalculateResult>
         .insert(productViewTable)
         .values({
           tech_sku_id: p.tech_sku_id,
-          hemicode: p.hemicode,
+          cn_code: p.cn_code,
           status: p.status,
           factory_code: p.factory_code,
           factory_mold: p.factory_mold,

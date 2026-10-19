@@ -64,7 +64,7 @@ export const addProductSchema = z
 
     // Campos opcionales (VARCHAR y REAL/INTEGER sin .notNull())
     hts_category: z.string().optional(),
-    hemicode: z.string().optional(),
+    cn_code: z.string().optional(),
     factory_code: z.string().optional(),
     factory_mold: z.string().optional(),
     item_upc: z.string().optional(),

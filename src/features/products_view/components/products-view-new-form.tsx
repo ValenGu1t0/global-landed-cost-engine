@@ -54,7 +54,7 @@ function Grid({ children }: GridProps) {
 export default function ProductsViewNewForm({ categories, pageTitle }: Props) {
   // Contemplamos la duplicación
   const cleanDefaultValues: Partial<AddProductSchema> = {
-    hemicode: '',
+    cn_code: '',
     hts_category: '',
     status: 'ACTIVE',
     factory_code: '',
@@ -231,8 +231,8 @@ export default function ProductsViewNewForm({ categories, pageTitle }: Props) {
             <Grid>
               <FormInput
                 control={form.control}
-                name='hemicode'
-                label='Hemicode'
+                name='cn_code'
+                label='CN-Code'
               />
               <FormSelect
                 control={form.control}

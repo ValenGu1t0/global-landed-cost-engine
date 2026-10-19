@@ -1,7 +1,7 @@
 'use server';
 
 import db from '@/db';
-import { productPicturesTable } from '@/db/schema';
+import { productPicturesTable, productViewTable } from '@/db/schema';
 import {
   getProductImagesBySkuIdSchema,
   GetProductImagesBySkuIdSchema
@@ -24,16 +24,28 @@ export async function getProductImagesBySkuId(
   const parsedInput = result.data;
 
   try {
-    const pictures = await db
-      .select({ imagePath: productPicturesTable.image_path })
-      .from(productPicturesTable)
-      .where(eq(productPicturesTable.tech_sku_id, parsedInput.tech_sku_id));
+    const [pictures, viewRows] = await Promise.all([
+      db
+        .select({ imagePath: productPicturesTable.image_path })
+        .from(productPicturesTable)
+        .where(eq(productPicturesTable.tech_sku_id, parsedInput.tech_sku_id)),
+      db
+        .select({ imagePath: productViewTable.image_path })
+        .from(productViewTable)
+        .where(eq(productViewTable.tech_sku_id, parsedInput.tech_sku_id))
+        .limit(1)
+    ]);
 
-    const fullImageUrls = pictures.map((picture) =>
-      resolveProductImageUrl(picture.imagePath)
+    const rawPaths = [
+      ...pictures.map((p) => p.imagePath),
+      ...(viewRows[0]?.imagePath ? [viewRows[0].imagePath] : [])
+    ].filter((p): p is string => Boolean(p && p.trim().length > 0));
+
+    const uniqueUrls = Array.from(
+      new Set(rawPaths.map((p) => resolveProductImageUrl(p)))
     );
 
-    return fullImageUrls;
+    return uniqueUrls;
   } catch (error) {
     throw new Error("Couldn't get the product images.");
   }

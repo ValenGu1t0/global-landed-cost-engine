@@ -3,7 +3,7 @@ TRUNCATE public.product_view_table_tmp;
 -- Insertar PRODUCT VIEW
 INSERT INTO public.product_view_table_tmp
 SELECT
-    p.tech_sku_id, p.hemicode, p.status, p.image_in_process, p.factory_code, p.factory_mold, p.item_upc, p.case_upc, 
+    p.tech_sku_id, p.cn_code, p.status, p.image_in_process, p.factory_code, p.factory_mold, p.item_upc, p.case_upc, 
     p.vendor, p.brand_name, p.origin_country, p.pre_price, p.factory_name, p.description, p.short_description, 
     p.super_category, p.category, p.sub_category, p.consumer_use, p.set_collection, p.product_collection, 
     p.process_type, p.season, p.color_family, p.color_description, p.pantone_code, p.tosaf_code, 
@@ -53,9 +53,9 @@ SELECT
     ia.today_105 AS inventory_today_105
 FROM int.product_view p
 LEFT JOIN public.ia_inventory_availability ia 
-    ON p.hemicode = ia.hemicode
+    ON p.cn_code = ia.cn_code
 LEFT JOIN public.ia_product_average_cost ac 
-    ON p.hemicode = ac.hemicode
+    ON p.cn_code = ac.cn_code
 LEFT JOIN (
     SELECT tech_sku_id, image_path
     FROM public.product_pictures
@@ -67,7 +67,7 @@ LEFT JOIN (
 -- Insertar KIT VIEW (UNION ALL)
 INSERT INTO public.product_view_table_tmp
 SELECT
-    k.tech_sku_id, k.hemicode, k.status, k.image_in_process, k.factory_code, k.factory_mold, k.item_upc, k.case_upc, 
+    k.tech_sku_id, k.cn_code, k.status, k.image_in_process, k.factory_code, k.factory_mold, k.item_upc, k.case_upc, 
     k.vendor, k.brand_name, k.origin_country, k.pre_price, k.factory_name, k.description, k.short_description, 
     k.super_category, k.category, k.sub_category, k.consumer_use, k.set_collection, k.product_collection, 
     k.process_type, k.season, k.color_family, k.color_description, k.pantone_code, k.tosaf_code, 
@@ -118,9 +118,9 @@ SELECT
     ia.today_105 AS inventory_today_105
 FROM int.kit_view k
 LEFT JOIN public.ia_inventory_availability ia 
-    ON k.hemicode = ia.hemicode
+    ON k.cn_code = ia.cn_code
 LEFT JOIN public.ia_product_average_cost ac 
-    ON k.hemicode = ac.hemicode
+    ON k.cn_code = ac.cn_code
 LEFT JOIN (
     SELECT tech_sku_id, image_path
     FROM public.product_pictures
