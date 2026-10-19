@@ -2,6 +2,8 @@
 
 import {
   type ColumnFiltersState,
+  type ColumnPinningState,
+  type ColumnSizingState,
   type PaginationState,
   type RowSelectionState,
   type SortingState,
@@ -103,6 +105,113 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 
   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>(
     initialState?.rowSelection ?? {}
+  );
+
+  const [columnSizing, setColumnSizing] = React.useState<ColumnSizingState>(
+    initialState?.columnSizing ?? {}
+  );
+
+  const normalizedColumns = React.useMemo(() => {
+    return columns.map((col: any) => {
+      const colId = String(col.id ?? col.accessorKey ?? '');
+      if (colId === 'select') {
+        return {
+          ...col,
+          size: 40,
+          minSize: 40,
+          maxSize: 40,
+          enableResizing: false
+        };
+      }
+      if (colId === 'actions') {
+        return {
+          ...col,
+          size: col.size ?? 75,
+          minSize: 70
+        };
+      }
+      if (colId === 'tech_sku_id' || colId === 'id') {
+        const minW = typeof col.header === 'string' ? 70 : 95;
+        return {
+          ...col,
+          size: Math.max(col.size ?? minW, minW),
+          minSize: minW
+        };
+      }
+      if (colId === 'image_path' || colId === 'image') {
+        return {
+          ...col,
+          size: Math.max(col.size ?? 100, 100),
+          minSize: 100
+        };
+      }
+
+      const headerText =
+        typeof col.header === 'string'
+          ? col.header
+          : (col.meta?.label ?? colId);
+      const charLen = Math.max(String(headerText).length, colId.length);
+      const minHeaderWidth = Math.max(105, Math.ceil(charLen * 8.5 + 72));
+      const defaultSize =
+        colId === 'description'
+          ? 280
+          : colId === 'short_description' || colId === 'notes'
+            ? 190
+            : Math.max(col.size ?? 150, minHeaderWidth);
+
+      return {
+        ...col,
+        minSize: Math.max(col.minSize ?? 0, minHeaderWidth),
+        size: Math.max(defaultSize, minHeaderWidth)
+      };
+    });
+  }, [columns]);
+
+  const alwaysPinnedLeft = React.useMemo(() => {
+    const colIds = columns
+      .map((c: any) => String(c.id ?? c.accessorKey ?? ''))
+      .filter(Boolean);
+    const pinned: string[] = [];
+    if (colIds.includes('select')) {
+      pinned.push('select');
+      if (colIds.includes('tech_sku_id')) {
+        pinned.push('tech_sku_id');
+      } else if (colIds.includes('id')) {
+        pinned.push('id');
+      }
+    }
+    return pinned;
+  }, [columns]);
+
+  const [columnPinning, setColumnPinning] = React.useState<ColumnPinningState>(
+    () => ({
+      left: [
+        ...alwaysPinnedLeft,
+        ...(initialState?.columnPinning?.left ?? []).filter(
+          (id) => !alwaysPinnedLeft.includes(id)
+        )
+      ],
+      right: initialState?.columnPinning?.right ?? []
+    })
+  );
+
+  const onColumnPinningChange = React.useCallback(
+    (updaterOrValue: Updater<ColumnPinningState>) => {
+      setColumnPinning((prev) => {
+        const next =
+          typeof updaterOrValue === 'function'
+            ? updaterOrValue(prev)
+            : updaterOrValue;
+        const userLeft = (next.left ?? []).filter(
+          (id) => !alwaysPinnedLeft.includes(id)
+        );
+        return {
+          ...next,
+          left: [...alwaysPinnedLeft, ...userLeft]
+        };
+      });
+    },
+    [alwaysPinnedLeft]
   );
 
   function buildInitialColumnVisibility(
@@ -298,7 +407,7 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
 
   const table = useReactTable({
     ...tableProps,
-    columns,
+    columns: normalizedColumns,
     initialState,
     pageCount,
     state: {
@@ -306,13 +415,19 @@ export function useDataTable<TData>(props: UseDataTableProps<TData>) {
       sorting,
       columnVisibility,
       rowSelection,
-      columnFilters
+      columnFilters,
+      columnSizing,
+      columnPinning
     },
     defaultColumn: {
       ...tableProps.defaultColumn,
       enableColumnFilter: false
     },
     enableRowSelection: true,
+    enableColumnResizing: true,
+    columnResizeMode: 'onChange',
+    onColumnSizingChange: setColumnSizing,
+    onColumnPinningChange,
     onRowSelectionChange: setRowSelection,
     onPaginationChange,
     onSortingChange,

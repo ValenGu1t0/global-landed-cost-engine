@@ -28,8 +28,8 @@ export default async function Page(props: pageProps) {
   const key = serializeHTSParams({ ...searchParams });
 
   return (
-    <PageContainer scrollable={true}>
-      <div className='flex flex-1 flex-col space-y-4'>
+    <PageContainer scrollable={false}>
+      <div className='flex min-h-0 min-w-0 flex-1 flex-col space-y-4'>
         <div className='flex items-center justify-between'>
           <Heading title='HTS Codes' description='Manage HTS Codes' />
           <HTSActions />

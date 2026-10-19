@@ -27,21 +27,21 @@ export default async function Page(props: pageProps) {
 
   return (
     <PageContainer scrollable={false}>
-      <div className='flex flex-1 flex-col gap-6'>
-        <div className='flex items-start justify-between'>
+      <div className='flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden'>
+        <div className='flex shrink-0 items-start justify-between'>
           <Heading title='Products' description='Manage products' />
           <ProductsViewActions />
         </div>
 
-        <Separator />
+        <Separator className='shrink-0' />
 
-        <div className='flex flex-col gap-4'>
+        <div className='flex min-w-0 shrink-0 flex-col gap-4'>
           <Suspense fallback={<div className='h-9' />}>
             <ProductsViewFilters />
           </Suspense>
         </div>
 
-        <div className='min-h-0 flex-1 overflow-hidden'>
+        <div className='min-h-0 min-w-0 flex-1 overflow-hidden'>
           <Suspense key={key} fallback={<ProductListSkeleton />}>
             <ProductsViewListPage />
           </Suspense>

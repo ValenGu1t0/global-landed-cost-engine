@@ -9,7 +9,7 @@ import {
 import { calculateProductEconomics } from '../lib/calculator/landed-cost-engine';
 
 async function seed() {
-  console.log('🌱 Starting database seed for Global Landed Cost Engine...');
+  console.log('🌱 Starting database seed for ConnectAR...');
 
   // 1. Seed System Parameters
   console.log('📦 Seeding system logistics parameters...');

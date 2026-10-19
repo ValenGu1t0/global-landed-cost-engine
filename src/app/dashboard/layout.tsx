@@ -6,7 +6,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
-  title: 'Global Landed Cost Engine',
+  title: 'ConnectAR',
   description:
     'Enterprise Global Trade Management & Freight Optimization Platform'
 };
@@ -23,7 +23,7 @@ export default async function DashboardLayout({
     <KBar>
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
-        <SidebarInset>
+        <SidebarInset className='h-svh max-h-svh max-w-full min-w-0 overflow-hidden'>
           <Header />
           {/* page main content */}
           {children}

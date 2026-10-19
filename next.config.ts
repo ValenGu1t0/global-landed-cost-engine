@@ -5,12 +5,12 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'api.slingacademy.com',
+        hostname: 'images.unsplash.com',
         port: ''
       },
       {
         protocol: 'https',
-        hostname: 'storagehemibrands.blob.core.windows.net',
+        hostname: 'api.slingacademy.com',
         port: ''
       }
     ]

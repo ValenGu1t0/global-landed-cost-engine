@@ -16,10 +16,16 @@ const META_THEME_COLORS = {
 };
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn',
-  description: 'Basic dashboard with Next.js and Shadcn',
+  title: 'ConnectAR',
+  description:
+    'Enterprise Global Trade Management & Multi-Modal Landed Cost Platform',
   icons: {
-    icon: '/favicon.png'
+    icon: [
+      { url: '/favicon.ico' },
+      { url: '/connectar-icon.png', type: 'image/png' }
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/connectar-icon.png'
   }
 };
 

@@ -51,7 +51,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
         loading={isPending}
       />
       <TooltipProvider>
-        <div className='flex items-center gap-1'>
+        <div className='flex items-center justify-center gap-1'>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button

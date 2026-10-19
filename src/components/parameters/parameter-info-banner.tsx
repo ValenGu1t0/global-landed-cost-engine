@@ -60,7 +60,7 @@ export function ParameterInfoBanner({
                   </span>
                 ) : (
                   <span className='flex items-center gap-1'>
-                    <Layers className='h-3 w-3' /> Multiple Active ($N$ Allowed)
+                    <Layers className='h-3 w-3' /> Multiple Active (N Allowed)
                   </span>
                 )}
               </Badge>

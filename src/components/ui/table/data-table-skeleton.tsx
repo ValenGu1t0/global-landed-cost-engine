@@ -39,16 +39,19 @@ export function DataTableSkeleton({
 
   return (
     <div
-      className={cn('relative flex flex-1 flex-col space-y-4', className)}
+      className={cn(
+        'relative flex min-h-0 min-w-0 flex-1 flex-col gap-4',
+        className
+      )}
       {...props}
     >
       {(withTableActions || withViewOptions) && (
-        <div className='absolute -top-[3rem] right-0 z-10 flex items-center gap-2'>
-          {withTableActions && <Skeleton className='h-8 w-24' />}
-          {withViewOptions && <Skeleton className='h-8 w-24' />}
+        <div className='absolute -top-[3.25rem] right-0 z-10 flex h-9 items-center gap-2'>
+          {withTableActions && <Skeleton className='h-9 w-24' />}
+          {withViewOptions && <Skeleton className='h-9 w-24' />}
         </div>
       )}
-      <div className='flex-1 rounded-md border'>
+      <div className='min-h-0 min-w-0 flex-1 overflow-hidden rounded-md border'>
         <Table>
           <TableHeader>
             {Array.from({ length: 1 }).map((_, i) => (

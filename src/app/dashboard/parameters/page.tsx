@@ -20,7 +20,10 @@ import { ArrowRight, History, Layers } from 'lucide-react';
 
 export default function ParametersPage() {
   const parametersItem = navItems.find((item) => item.title === 'Parameters');
-  const parameterSubItems = parametersItem?.items ?? [];
+  const parameterSubItems = (parametersItem?.items ?? []).filter(
+    (item) =>
+      item.title !== 'All Parameters' && item.url !== '/dashboard/parameters'
+  );
 
   return (
     <PageContainer scrollable={true}>
@@ -41,7 +44,7 @@ export default function ParametersPage() {
             <CardHeader className='pb-2'>
               <div className='flex items-center gap-2'>
                 <Badge variant='default' className='text-xs'>
-                  <Layers className='mr-1 h-3 w-3' /> Multiple Concurrent ($N$
+                  <Layers className='mr-1 h-3 w-3' /> Multiple Concurrent (N
                   Active)
                 </Badge>
               </div>

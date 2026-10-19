@@ -1,7 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Cross2Icon } from '@radix-ui/react-icons';
 import { useQueryState } from 'nuqs';
 import { inlandParameterSearchParams } from '@/features/parameters/inland_parameter/searchparams';
 import { useTransitionContext } from '@/hooks/use-transition-context';
@@ -36,6 +38,13 @@ export function InlandParameterFilters() {
     }
   };
 
+  const handleResetFilters = () => {
+    setSearch(null);
+    setPage(1);
+  };
+
+  const hasActiveFilters = search !== null;
+
   return (
     <div className='flex w-full items-center gap-2'>
       <div className='flex flex-1 flex-wrap items-center gap-2'>
@@ -43,8 +52,20 @@ export function InlandParameterFilters() {
           placeholder='Search inland parameters...'
           value={search || ''}
           onChange={handleSearchChange}
-          className='h-9 w-40 lg:w-56'
+          className='h-9 w-56 lg:w-72'
         />
+
+        {hasActiveFilters && (
+          <Button
+            variant='outline'
+            size='sm'
+            className='h-9 border-dashed'
+            onClick={handleResetFilters}
+          >
+            <Cross2Icon />
+            Clean Search
+          </Button>
+        )}
       </div>
     </div>
   );

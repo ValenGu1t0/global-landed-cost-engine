@@ -25,14 +25,14 @@ function formatDateLabel(daysToAdd: number = 0) {
 
 // Formatea un valor numérico real (decimal) para mostrar hasta 4 decimales.
 const RealValueCell = ({ value }: { value: number | null | undefined }) => (
-  <div className='text-right'>
+  <div className='text-center'>
     {value !== null && value !== undefined ? value.toFixed(4) : '-'}
   </div>
 );
 
 // Formatea un valor de costo con símbolo de moneda y 2 decimales.
 const CostValueCell = ({ value }: { value: number | null | undefined }) => (
-  <div className='text-right'>
+  <div className='text-center'>
     {value !== null && value !== undefined ? `$${value.toFixed(2)}` : '-'}
   </div>
 );
@@ -66,6 +66,8 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     enableSorting: false,
     enableHiding: false,
     enableResizing: false,
+    size: 40,
+    minSize: 40,
     maxSize: 40
   },
 
@@ -88,16 +90,13 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Image' pin />
     ),
-    cell: ({ column, row }) => {
+    cell: ({ row }) => {
       const imagePath = row.getValue<string>('image_path');
       const inProcess = row.original.image_in_process;
-      const isPinned = column.getIsPinned();
 
       if (!imagePath) {
         return (
-          <div
-            className={`bg-background flex h-16 items-center justify-center text-xs text-gray-400`}
-          >
+          <div className='text-muted-foreground flex h-16 items-center justify-center text-xs'>
             No Image
           </div>
         );
@@ -106,13 +105,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
       const fullImageUrl = resolveProductImageUrl(imagePath);
 
       return (
-        <div
-          className={
-            isPinned
-              ? 'bg-background z-[50] flex items-center justify-center px-6 py-1'
-              : ''
-          }
-        >
+        <div className='flex items-center justify-center py-1'>
           <div
             className={`relative h-16 w-16 overflow-hidden rounded-md shadow-sm ${inProcess ? 'border-2 border-yellow-400' : ''} `}
           >
@@ -135,14 +128,8 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title='Hemicode' pin />
     ),
-    cell: ({ column, row }) => {
-      const isPinned = column.getIsPinned();
-
-      return (
-        <div className={isPinned ? 'bg-background z-[50] p-4' : ''}>
-          {row.getValue('hemicode')}
-        </div>
-      );
+    cell: ({ row }) => {
+      return <div className='font-medium'>{row.getValue('hemicode')}</div>;
     },
     size: 100,
     enableHiding: false
@@ -198,7 +185,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => <CellAction data={row.original} />,
-    maxSize: 42
+    size: 70
   },
 
   {
@@ -260,27 +247,22 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
   {
     accessorKey: 'description',
     header: ({ column }) => (
-      <DataTableColumnHeader
-        column={column}
-        title='Description'
-        pin
-        className={column.getIsPinned() ? 'bg-muted z-[60]' : ''}
-      />
+      <DataTableColumnHeader column={column} title='Description' pin />
     ),
-    cell: ({ column, row }) => {
-      const isPinned = column.getIsPinned();
-
+    cell: ({ row }) => {
+      const val = String(row.getValue('description') ?? '');
       return (
-        <div className={isPinned ? 'bg-background z-[50] p-4' : ''}>
-          {row.getValue('description')}
+        <div className='truncate' title={val}>
+          {val}
         </div>
       );
-    }
+    },
+    size: 280
   },
   {
     accessorKey: 'short_description',
     header: 'Short Desc.',
-    size: 150
+    size: 190
   },
   {
     accessorKey: 'super_category',
@@ -370,7 +352,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Pcs/Unit',
     size: 90,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -378,7 +360,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Case Pack',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -386,7 +368,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Pcs/Carton',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -394,7 +376,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Cartons/Pallet',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -402,7 +384,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Est. Cartons/Pallet',
     size: 160,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -411,7 +393,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'TI (Layer)',
     size: 90,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -419,7 +401,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'HI (Height)',
     size: 90,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
 
@@ -440,7 +422,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'L (mm)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -448,7 +430,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'H (mm)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -456,7 +438,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'W (mm)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -464,7 +446,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Weight (kg)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -472,7 +454,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Volume (ml)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -482,7 +464,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'L (in)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -490,7 +472,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'H (in)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -498,7 +480,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'W (in)',
     size: 80,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -506,7 +488,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Weight (lb)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -514,7 +496,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Volume (oz)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -524,7 +506,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set L (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -532,7 +514,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set H (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -540,7 +522,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set W (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -548,7 +530,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set Wgt (kg)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -556,7 +538,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set Wgt (lb)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -564,7 +546,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set L (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -572,7 +554,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set H (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -580,7 +562,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Set W (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -590,7 +572,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton L (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -598,7 +580,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton H (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -606,7 +588,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton W (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -614,7 +596,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton Wgt (kg)',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -622,7 +604,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton L (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -630,7 +612,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton H (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -638,7 +620,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton W (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -646,7 +628,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Carton Wgt (lb)',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -656,7 +638,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Pcs/Polybag',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -664,7 +646,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Polybag/Pallet',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -679,7 +661,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: '40HC Pallets',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -687,7 +669,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: '45HC Pallets',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -695,7 +677,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: '40STD Pallets',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -703,7 +685,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: '20STD Pallets',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -711,7 +693,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: '53FT Pallets',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
 
@@ -721,7 +703,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. L (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -729,7 +711,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. W (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -737,7 +719,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. H (mm)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -745,7 +727,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. L (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -753,7 +735,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. W (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -761,7 +743,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P. H (in)',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -771,7 +753,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C L (mm)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -779,7 +761,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C W (mm)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -787,7 +769,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C H (mm)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -795,7 +777,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C L (in)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -803,7 +785,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C W (in)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -811,7 +793,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'P/C H (in)',
     size: 110,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
 
@@ -821,7 +803,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Case CBM',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(4)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(4)}</div>
     )
   },
   {
@@ -829,7 +811,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'CBM Const',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(4)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(4)}</div>
     )
   },
   {
@@ -837,7 +819,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Case CFT',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(4)}</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(4)}</div>
     )
   },
 
@@ -852,7 +834,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Stacked P.',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -860,7 +842,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Rec. Cartons/P.',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
 
@@ -877,7 +859,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'HTS Duty (%)',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()?.toFixed(2)}%</div>
+      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}%</div>
     )
   },
   {
@@ -899,7 +881,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'FOB Cost',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>${cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -923,7 +905,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'EXW Cost',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>${cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -947,7 +929,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'DDP Cost',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>${cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -971,7 +953,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'CNF Diff Cost',
     size: 120,
     cell: ({ cell }) => (
-      <div className='text-right'>${cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -995,7 +977,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'CNF Cost',
     size: 100,
     cell: ({ cell }) => (
-      <div className='text-right'>${cell.getValue<number>()?.toFixed(2)}</div>
+      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
     )
   },
   {
@@ -1077,7 +1059,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Confirmed C/40HC',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -1111,7 +1093,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Confirmed C/45HC',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -1145,7 +1127,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Confirmed C/40STD',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -1179,7 +1161,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Confirmed C/20STD',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {
@@ -1213,7 +1195,7 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Confirmed C/53FT',
     size: 140,
     cell: ({ cell }) => (
-      <div className='text-right'>{cell.getValue<number>()}</div>
+      <div className='text-center'>{cell.getValue<number>()}</div>
     )
   },
   {

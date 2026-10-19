@@ -59,13 +59,25 @@ export default function AppSidebar() {
 
   return (
     <Sidebar collapsible='icon'>
-      <SidebarHeader className='flex items-center justify-center p-6'>
-        <Link href='/dashboard/overview'>
+      <SidebarHeader className='flex items-center justify-center p-4 group-data-[collapsible=icon]:p-2'>
+        <Link
+          href='/dashboard/overview'
+          className='flex items-center justify-center'
+        >
           <Image
-            src='/logo.svg'
-            width={180}
-            height={42}
-            alt='Global Landed Cost Engine Logo'
+            src='/connectar-symbol.png'
+            width={112}
+            height={71}
+            alt='ConnectAR Logo'
+            className='h-auto w-24 object-contain transition-all group-data-[collapsible=icon]:hidden'
+            priority
+          />
+          <Image
+            src='/connectar-icon.png'
+            width={32}
+            height={32}
+            alt='ConnectAR Icon'
+            className='hidden size-8 object-contain transition-all group-data-[collapsible=icon]:block'
             priority
           />
         </Link>

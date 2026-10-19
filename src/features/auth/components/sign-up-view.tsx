@@ -21,7 +21,7 @@ export default function SignUpViewPage() {
           <div className='flex h-9 w-9 items-center justify-center rounded-lg border border-emerald-500/30 bg-emerald-500/20 text-emerald-400'>
             <Calculator className='h-5 w-5' />
           </div>
-          <span>Global Landed Cost Engine</span>
+          <span>ConnectAR</span>
         </div>
 
         {/* Center Hero */}
@@ -75,7 +75,7 @@ export default function SignUpViewPage() {
             <div className='mb-2 flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-lg'>
               <Calculator className='h-6 w-6' />
             </div>
-            <h2 className='text-xl font-bold'>Global Landed Cost Engine</h2>
+            <h2 className='text-xl font-bold'>ConnectAR</h2>
             <p className='text-muted-foreground text-xs'>
               Create an account to test the portfolio demo
             </p>

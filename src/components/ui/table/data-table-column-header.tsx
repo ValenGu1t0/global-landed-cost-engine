@@ -32,16 +32,25 @@ export function DataTableColumnHeader<TData, TValue>({
   ...props
 }: DataTableColumnHeaderProps<TData, TValue>) {
   if (!column.getCanSort() && !column.getCanHide()) {
-    return <div className={cn(className)}>{title}</div>;
+    return (
+      <div
+        className={cn(
+          'flex items-center justify-center text-center',
+          className
+        )}
+      >
+        {title}
+      </div>
+    );
   }
 
   return (
-    <div className='bg-muted z-50 flex flex-row px-1'>
+    <div className='bg-muted flex w-full flex-row items-center justify-center px-1'>
       {/* Dropdown de opciones */}
       <DropdownMenu>
         <DropdownMenuTrigger
           className={cn(
-            'hover:bg-accent focus:ring-ring data-[state=open]:bg-accent [&_svg]:text-muted-foreground -ml-1.5 flex h-8 items-center gap-1.5 rounded-md px-2 py-1.5 focus:ring-1 focus:outline-none [&_svg]:size-4 [&_svg]:shrink-0',
+            'hover:bg-accent focus:ring-ring data-[state=open]:bg-accent [&_svg]:text-muted-foreground flex h-8 items-center justify-center gap-1.5 rounded-md px-2 py-1.5 focus:ring-1 focus:outline-none [&_svg]:size-4 [&_svg]:shrink-0',
             className
           )}
           {...props}
