@@ -489,8 +489,44 @@ export default function ProductViewForm({
               </Grid>
             </Section>
             <Separator />
-            <Section title='Product Dimensions'>
+            <Section title='Product Dimensions (cm, in & mm)'>
               <Grid>
+                <FormInput
+                  control={form.control}
+                  name='product_length_cm'
+                  label='Length (cm)'
+                  type='number'
+                />
+                <FormInput
+                  control={form.control}
+                  name='product_width_cm'
+                  label='Width (cm)'
+                  type='number'
+                />
+                <FormInput
+                  control={form.control}
+                  name='product_height_cm'
+                  label='Height (cm)'
+                  type='number'
+                />
+                <FormInput
+                  control={form.control}
+                  name='product_length_in'
+                  label='Length (inches)'
+                  type='number'
+                />
+                <FormInput
+                  control={form.control}
+                  name='product_width_in'
+                  label='Width (inches)'
+                  type='number'
+                />
+                <FormInput
+                  control={form.control}
+                  name='product_height_in'
+                  label='Height (inches)'
+                  type='number'
+                />
                 <FormInput
                   control={form.control}
                   name='product_length_mm'

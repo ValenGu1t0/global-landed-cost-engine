@@ -242,27 +242,38 @@ export const updateProduct = authActionClient
     if (updatedProduct) {
       const economics = calculateProductEconomics({
         ...updatedProduct,
-        fob_current_cost_value: parsedInput.fob ?? undefined,
-        exw_current_cost_value: parsedInput.exw ?? undefined,
-        cnf_current_cost_value: parsedInput.cnf ?? undefined,
-        ddp_current_cost_value: parsedInput.ddp ?? undefined,
-        mrsp: parsedInput.mrsp ?? undefined,
-        commission_percentage: parsedInput.commission_percentage ?? undefined
+        fob_current_cost_value:
+          parsedInput.fob ?? updatedProduct.fob ?? undefined,
+        exw_current_cost_value:
+          parsedInput.exw ?? updatedProduct.exw ?? undefined,
+        cnf_current_cost_value:
+          parsedInput.cnf ?? updatedProduct.cnf ?? undefined,
+        cnf_diff_current_cost_value:
+          parsedInput.cnf_diff ?? updatedProduct.cnf_diff ?? undefined,
+        ddp_current_cost_value:
+          parsedInput.ddp ?? updatedProduct.ddp ?? undefined,
+        mrsp: parsedInput.mrsp ?? updatedProduct.mrsp ?? undefined,
+        commission_percentage:
+          parsedInput.commission_percentage ??
+          updatedProduct.commission_percentage ??
+          undefined
       });
+
+      const { base_cost, tariff_cost, ...viewEconomics } = economics;
 
       await db
         .update(productViewTable)
         .set({
-          ...economics,
+          ...viewEconomics,
           ...(parsedInput.cn_code ? { cn_code: parsedInput.cn_code } : {}),
           ...(parsedInput.description
             ? { description: parsedInput.description }
             : {}),
+          ...(parsedInput.origin_country
+            ? { origin_country: parsedInput.origin_country }
+            : {}),
           ...(parsedInput.vendor ? { vendor: parsedInput.vendor } : {}),
           ...(parsedInput.category ? { category: parsedInput.category } : {}),
-          ...(parsedInput.fob !== undefined
-            ? { fob_current_cost_value: parsedInput.fob }
-            : {}),
           ...(parsedInput.mrsp !== undefined ? { mrsp: parsedInput.mrsp } : {})
         })
         .where(eq(productViewTable.tech_sku_id, tech_sku_id));

@@ -416,7 +416,46 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     header: 'Notes'
   },
 
-  /// === Dimensiones del Producto (Métrico) === ///
+  /// === Dimensiones del Producto (Métrico cm & mm) === ///
+  {
+    accessorKey: 'product_length_cm',
+    header: 'L (cm)',
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(1)} cm` : '-'}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'product_width_cm',
+    header: 'W (cm)',
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(1)} cm` : '-'}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'product_height_cm',
+    header: 'H (cm)',
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(1)} cm` : '-'}
+        </div>
+      );
+    }
+  },
   {
     accessorKey: 'product_length_mm',
     header: 'L (mm)',
@@ -458,30 +497,45 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     )
   },
 
-  /// === Dimensiones del Producto (Imperial) === ///
+  /// === Dimensiones del Producto (Imperial in & lb) === ///
   {
     accessorKey: 'product_length_in',
     header: 'L (in)',
-    size: 80,
-    cell: ({ cell }) => (
-      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
-    )
-  },
-  {
-    accessorKey: 'product_height_in',
-    header: 'H (in)',
-    size: 80,
-    cell: ({ cell }) => (
-      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
-    )
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(2)}"` : '-'}
+        </div>
+      );
+    }
   },
   {
     accessorKey: 'product_width_in',
     header: 'W (in)',
-    size: 80,
-    cell: ({ cell }) => (
-      <div className='text-center'>{cell.getValue<number>()?.toFixed(2)}</div>
-    )
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(2)}"` : '-'}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'product_height_in',
+    header: 'H (in)',
+    size: 90,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs'>
+          {val != null ? `${val.toFixed(2)}"` : '-'}
+        </div>
+      );
+    }
   },
   {
     accessorKey: 'product_weight_lb',
@@ -873,49 +927,26 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     size: 150
   },
 
-  /// === Costos y Fechas de Actualización (FOB, EXW, DDP, CNF) === ///
+  /// === 5 Incoterms Base (EXW -> FOB -> CNF -> CNF Diff -> DDP) === ///
 
-  // FOB
-  {
-    accessorKey: 'fob_current_cost_value',
-    header: 'FOB Cost',
-    size: 100,
-    cell: ({ cell }) => (
-      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
-    )
-  },
-  {
-    accessorKey: 'fob_current_cost_start_date',
-    header: 'FOB Date',
-    size: 100
-    /* cell: ({ cell }) => {
-            const date = cell.getValue<Date>();
-            return date ? format(new Date(date), 'dd/MM/yy') : '-';
-        }, */
-  },
-  {
-    accessorKey: 'fob_current_cost_update_commentary',
-    header: 'FOB Comment',
-    size: 200
-  },
-
-  // EXW
+  // 1. EXW (Ex Works - Salida de Fábrica)
   {
     accessorKey: 'exw_current_cost_value',
-    header: 'EXW Cost',
-    size: 100,
-    cell: ({ cell }) => (
-      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
-    )
+    header: 'EXW (Factory)',
+    size: 120,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs font-medium text-amber-600 dark:text-amber-400'>
+          {val != null ? `$${val.toFixed(2)}` : '-'}
+        </div>
+      );
+    }
   },
   {
     accessorKey: 'exw_current_cost_start_date',
     header: 'EXW Date',
     size: 100
-    /* cell: ({ cell }) => {
-            const date = cell.getValue<Date>();
-            return date ? format(new Date(date), 'dd/MM/yy') : '-';
-        }, */
   },
   {
     accessorKey: 'exw_current_cost_update_commentary',
@@ -923,62 +954,44 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     size: 200
   },
 
-  // DDP
+  // 2. FOB (Free On Board - Puerto de Origen)
   {
-    accessorKey: 'ddp_current_cost_value',
-    header: 'DDP Cost',
-    size: 100,
-    cell: ({ cell }) => (
-      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
-    )
+    accessorKey: 'fob_current_cost_value',
+    header: 'FOB (Origin Port)',
+    size: 130,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs font-semibold text-sky-600 dark:text-sky-400'>
+          {val != null ? `$${val.toFixed(2)}` : '-'}
+        </div>
+      );
+    }
   },
   {
-    accessorKey: 'ddp_current_cost_start_date',
-    header: 'DDP Date',
+    accessorKey: 'fob_current_cost_start_date',
+    header: 'FOB Date',
     size: 100
-    /* cell: ({ cell }) => {
-            const date = cell.getValue<Date>();
-            return date ? format(new Date(date), 'dd/MM/yy') : '-';
-        }, */
   },
   {
-    accessorKey: 'ddp_current_cost_update_commentary',
-    header: 'DDP Comment',
+    accessorKey: 'fob_current_cost_update_commentary',
+    header: 'FOB Comment',
     size: 200
   },
 
-  // CNF Diff
-  {
-    accessorKey: 'cnf_diff_current_cost_value',
-    header: 'CNF Diff Cost',
-    size: 120,
-    cell: ({ cell }) => (
-      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
-    )
-  },
-  {
-    accessorKey: 'cnf_diff_current_cost_start_date',
-    header: 'CNF Diff Date',
-    size: 120
-    /* cell: ({ cell }) => {
-            const date = cell.getValue<Date>();
-            return date ? format(new Date(date), 'dd/MM/yy') : '-';
-        }, */
-  },
-  {
-    accessorKey: 'cnf_diff_current_cost_update_commentary',
-    header: 'CNF Diff Comment',
-    size: 200
-  },
-
-  // CNF
+  // 3. CNF (Cost & Freight - Flete Marítimo Incluido)
   {
     accessorKey: 'cnf_current_cost_value',
-    header: 'CNF Cost',
-    size: 100,
-    cell: ({ cell }) => (
-      <div className='text-center'>${cell.getValue<number>()?.toFixed(2)}</div>
-    )
+    header: 'CNF (Cost+Freight)',
+    size: 140,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs font-medium text-indigo-600 dark:text-indigo-400'>
+          {val != null ? `$${val.toFixed(2)}` : '-'}
+        </div>
+      );
+    }
   },
   {
     accessorKey: 'cnf_current_cost_start_date',
@@ -993,6 +1006,183 @@ export const columns: ColumnDef<ProductsViewTable>[] = [
     accessorKey: 'cnf_current_cost_update_commentary',
     header: 'CNF Comment',
     size: 200
+  },
+
+  // 4. CNF Diff (Diferencial de Flete FOB -> CNF)
+  {
+    accessorKey: 'cnf_diff_current_cost_value',
+    header: 'CNF Diff (+Freight)',
+    size: 140,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-muted-foreground text-center font-mono text-xs'>
+          {val != null ? `+$${val.toFixed(2)}` : '-'}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'cnf_diff_current_cost_start_date',
+    header: 'CNF Diff Date',
+    size: 120
+  },
+  {
+    accessorKey: 'cnf_diff_current_cost_update_commentary',
+    header: 'CNF Diff Comment',
+    size: 200
+  },
+
+  // 5. DDP (Delivered Duty Paid - Puesto en Destino con Impuestos)
+  {
+    accessorKey: 'ddp_current_cost_value',
+    header: 'DDP (Delivered)',
+    size: 130,
+    cell: ({ cell }) => {
+      const val = cell.getValue<number>();
+      return (
+        <div className='text-center font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400'>
+          {val != null ? `$${val.toFixed(2)}` : '-'}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'ddp_current_cost_start_date',
+    header: 'DDP Date',
+    size: 100
+  },
+  {
+    accessorKey: 'ddp_current_cost_update_commentary',
+    header: 'DDP Comment',
+    size: 200
+  },
+
+  /// === Precios Landed por País de Destino (Recorrido Internacional) === ///
+  {
+    accessorKey: 'landed_cost_usa',
+    header: '🇺🇸 USA Landed',
+    size: 145,
+    cell: ({ row, cell }) => {
+      const val = cell.getValue<number>();
+      const fob = row.original.fob_current_cost_value;
+      const pct =
+        val != null && fob && fob > 0
+          ? Math.round(((val - fob) / fob) * 100)
+          : null;
+      return (
+        <div className='flex items-center justify-center gap-1.5 font-mono text-xs'>
+          <span className='font-semibold'>
+            {val != null ? `$${val.toFixed(2)}` : '-'}
+          </span>
+          {pct != null && (
+            <span className='rounded bg-emerald-500/10 px-1 py-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400'>
+              +{pct}%
+            </span>
+          )}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'landed_cost_canada',
+    header: '🇨🇦 Canada Landed',
+    size: 150,
+    cell: ({ row, cell }) => {
+      const val = cell.getValue<number>();
+      const fob = row.original.fob_current_cost_value;
+      const pct =
+        val != null && fob && fob > 0
+          ? Math.round(((val - fob) / fob) * 100)
+          : null;
+      return (
+        <div className='flex items-center justify-center gap-1.5 font-mono text-xs'>
+          <span className='font-semibold'>
+            {val != null ? `$${val.toFixed(2)}` : '-'}
+          </span>
+          {pct != null && (
+            <span className='rounded bg-sky-500/10 px-1 py-0.5 text-[10px] font-medium text-sky-600 dark:text-sky-400'>
+              +{pct}%
+            </span>
+          )}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'landed_cost_france',
+    header: '🇫🇷 France Landed',
+    size: 150,
+    cell: ({ row, cell }) => {
+      const val = cell.getValue<number>();
+      const fob = row.original.fob_current_cost_value;
+      const pct =
+        val != null && fob && fob > 0
+          ? Math.round(((val - fob) / fob) * 100)
+          : null;
+      return (
+        <div className='flex items-center justify-center gap-1.5 font-mono text-xs'>
+          <span className='font-semibold'>
+            {val != null ? `$${val.toFixed(2)}` : '-'}
+          </span>
+          {pct != null && (
+            <span className='rounded bg-indigo-500/10 px-1 py-0.5 text-[10px] font-medium text-indigo-600 dark:text-indigo-400'>
+              +{pct}%
+            </span>
+          )}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'landed_cost_morocco',
+    header: '🇲🇦 Morocco Landed',
+    size: 155,
+    cell: ({ row, cell }) => {
+      const val = cell.getValue<number>();
+      const fob = row.original.fob_current_cost_value;
+      const pct =
+        val != null && fob && fob > 0
+          ? Math.round(((val - fob) / fob) * 100)
+          : null;
+      return (
+        <div className='flex items-center justify-center gap-1.5 font-mono text-xs'>
+          <span className='font-semibold'>
+            {val != null ? `$${val.toFixed(2)}` : '-'}
+          </span>
+          {pct != null && (
+            <span className='rounded bg-amber-500/10 px-1 py-0.5 text-[10px] font-medium text-amber-600 dark:text-amber-400'>
+              +{pct}%
+            </span>
+          )}
+        </div>
+      );
+    }
+  },
+  {
+    accessorKey: 'landed_cost_israel',
+    header: '🇮🇱 Israel Landed',
+    size: 145,
+    cell: ({ row, cell }) => {
+      const val = cell.getValue<number>();
+      const fob = row.original.fob_current_cost_value;
+      const pct =
+        val != null && fob && fob > 0
+          ? Math.round(((val - fob) / fob) * 100)
+          : null;
+      return (
+        <div className='flex items-center justify-center gap-1.5 font-mono text-xs'>
+          <span className='font-semibold'>
+            {val != null ? `$${val.toFixed(2)}` : '-'}
+          </span>
+          {pct != null && (
+            <span className='rounded bg-purple-500/10 px-1 py-0.5 text-[10px] font-medium text-purple-600 dark:text-purple-400'>
+              +{pct}%
+            </span>
+          )}
+        </div>
+      );
+    }
   },
 
   /// === Costos y Aranceles === ///

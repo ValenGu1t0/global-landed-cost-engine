@@ -69,6 +69,12 @@ export const updateProductSchema = z
     product_length_mm: z.coerce.number().optional().nullable(),
     product_width_mm: z.coerce.number().optional().nullable(),
     product_height_mm: z.coerce.number().optional().nullable(),
+    product_length_cm: z.coerce.number().optional().nullable(),
+    product_width_cm: z.coerce.number().optional().nullable(),
+    product_height_cm: z.coerce.number().optional().nullable(),
+    product_length_in: z.coerce.number().optional().nullable(),
+    product_width_in: z.coerce.number().optional().nullable(),
+    product_height_in: z.coerce.number().optional().nullable(),
     product_weight_kg: z.coerce.number().optional().nullable(),
     product_volume_ml: z.coerce.number().optional().nullable(),
 

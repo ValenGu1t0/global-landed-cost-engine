@@ -277,6 +277,21 @@ const COLUMN_CONFIGS: Record<
   },
 
   // Dimensiones del Producto (in/lb/oz)
+  product_length_cm: {
+    id: 'product_length_cm',
+    header: 'Product Length (cm)',
+    format: (_, row) => numberToFixed2(row.product_length_cm)
+  },
+  product_height_cm: {
+    id: 'product_height_cm',
+    header: 'Product Height (cm)',
+    format: (_, row) => numberToFixed2(row.product_height_cm)
+  },
+  product_width_cm: {
+    id: 'product_width_cm',
+    header: 'Product Width (cm)',
+    format: (_, row) => numberToFixed2(row.product_width_cm)
+  },
   product_length_in: {
     id: 'product_length_in',
     header: 'Product Length (in)',
@@ -864,6 +879,31 @@ const COLUMN_CONFIGS: Record<
     id: 'landed_cost_53ft',
     header: 'Landed Cost 53FT',
     format: (_, row) => numberToFixed2(row.landed_cost_53ft)
+  },
+  landed_cost_usa: {
+    id: 'landed_cost_usa',
+    header: 'USA Landed Cost',
+    format: (_, row) => numberToFixed2(row.landed_cost_usa)
+  },
+  landed_cost_canada: {
+    id: 'landed_cost_canada',
+    header: 'Canada Landed Cost',
+    format: (_, row) => numberToFixed2(row.landed_cost_canada)
+  },
+  landed_cost_france: {
+    id: 'landed_cost_france',
+    header: 'France Landed Cost',
+    format: (_, row) => numberToFixed2(row.landed_cost_france)
+  },
+  landed_cost_morocco: {
+    id: 'landed_cost_morocco',
+    header: 'Morocco Landed Cost',
+    format: (_, row) => numberToFixed2(row.landed_cost_morocco)
+  },
+  landed_cost_israel: {
+    id: 'landed_cost_israel',
+    header: 'Israel Landed Cost',
+    format: (_, row) => numberToFixed2(row.landed_cost_israel)
   },
 
   // Image & Avg Cost

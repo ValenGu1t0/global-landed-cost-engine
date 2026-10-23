@@ -6,10 +6,40 @@ import {
   productTable,
   productViewTable
 } from './schema';
+import { eq, sql } from 'drizzle-orm';
 import { calculateProductEconomics } from '../lib/calculator/landed-cost-engine';
 
 async function seed() {
-  console.log('🌱 Starting database seed for ConnectAR...');
+  console.log('🌱 Starting database migration & seed for ConnectAR...');
+
+  // 0. Ensure new columns exist in PostgreSQL
+  await db.execute(sql`
+    ALTER TABLE public.product_view_table
+      ADD COLUMN IF NOT EXISTS product_length_cm real,
+      ADD COLUMN IF NOT EXISTS product_height_cm real,
+      ADD COLUMN IF NOT EXISTS product_width_cm real,
+      ADD COLUMN IF NOT EXISTS landed_cost_usa real,
+      ADD COLUMN IF NOT EXISTS landed_cost_canada real,
+      ADD COLUMN IF NOT EXISTS landed_cost_france real,
+      ADD COLUMN IF NOT EXISTS landed_cost_morocco real,
+      ADD COLUMN IF NOT EXISTS landed_cost_israel real;
+  `);
+
+  await db.execute(sql`
+    ALTER TABLE public.product
+      ADD COLUMN IF NOT EXISTS product_length_cm real,
+      ADD COLUMN IF NOT EXISTS product_width_cm real,
+      ADD COLUMN IF NOT EXISTS product_height_cm real,
+      ADD COLUMN IF NOT EXISTS product_length_in real,
+      ADD COLUMN IF NOT EXISTS product_width_in real,
+      ADD COLUMN IF NOT EXISTS product_height_in real,
+      ADD COLUMN IF NOT EXISTS landed_cost_usa real,
+      ADD COLUMN IF NOT EXISTS landed_cost_canada real,
+      ADD COLUMN IF NOT EXISTS landed_cost_france real,
+      ADD COLUMN IF NOT EXISTS landed_cost_morocco real,
+      ADD COLUMN IF NOT EXISTS landed_cost_israel real;
+  `);
+  console.log('✅ Schema columns verified/added.');
 
   // 1. Seed System Parameters
   console.log('📦 Seeding system logistics parameters...');
@@ -108,6 +138,15 @@ async function seed() {
         hts_product_subtype: 'Storage Organizers & Fabric Bins',
         cost_group: 'CUSTOMS',
         notes: 'Foldable storage cubes'
+      },
+      {
+        hts_code: '7013.37.2000',
+        hts_category: 'GLASS',
+        duty: 6.0,
+        type: 'DUTY_PCT',
+        hts_product_subtype: 'Tempered Drinking Glassware',
+        cost_group: 'CUSTOMS',
+        notes: 'Mercosur / Brazil glassware import tariff'
       }
     ])
     .onConflictDoNothing();
@@ -279,11 +318,50 @@ async function seed() {
       tariff: 7.5,
       image_path:
         'https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop&q=80'
+    },
+    {
+      tech_sku_id: 1006,
+      cn_code: 'SKU-1006',
+      status: 'ACTIVE',
+      vendor: 'CristalSul Brasil',
+      brand_name: 'VitroBrasil',
+      origin_country: 'Brazil',
+      factory_name: 'São Paulo Glassworks Plant 1',
+      description:
+        'Tempered Crystal Drinking Glasses Commercial Pack (Pallet Case of 120 Pcs)',
+      short_description: 'Brazilian Glassware Case 120pc',
+      super_category: 'HOME',
+      category: 'Drinkware',
+      sub_category: 'Glassware',
+      consumer_use: 'Hospitality & Retail',
+      season: 'ALL_YEAR',
+      color_family: 'Crystal Clear',
+      raw_material: 'Tempered Soda-Lime Glass',
+      packing: 'Export Master Pallet Box',
+      pieces_per_unit: 1,
+      case_pack: 1,
+      product_length_mm: 780,
+      product_width_mm: 580,
+      product_height_mm: 480,
+      product_weight_kg: 34.0,
+      carton_length_mm: 800,
+      carton_height_mm: 500,
+      carton_width_mm: 600,
+      carton_weight_kg: 36.0,
+      hts_code: '7013.37.2000',
+      hts_duty: 6.0,
+      exw_current_cost_value: 94.79,
+      fob_current_cost_value: 100.0,
+      mrsp: 229.99,
+      tariff: 0.0,
+      image_path:
+        'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?w=600&auto=format&fit=crop&q=80'
     }
   ];
 
   for (const prod of sampleProducts) {
     const economics = calculateProductEconomics(prod);
+    const { base_cost, tariff_cost, ...viewEconomics } = economics;
 
     // 1. Insert into productTable
     await db
@@ -308,10 +386,32 @@ async function seed() {
         packing: prod.packing,
         pieces_per_unit: prod.pieces_per_unit,
         case_pack: prod.case_pack,
+        product_length_mm: economics.product_length_mm,
+        product_width_mm: economics.product_width_mm,
+        product_height_mm: economics.product_height_mm,
+        product_length_cm: economics.product_length_cm,
+        product_width_cm: economics.product_width_cm,
+        product_height_cm: economics.product_height_cm,
+        product_length_in: economics.product_length_in,
+        product_width_in: economics.product_width_in,
+        product_height_in: economics.product_height_in,
+        product_weight_kg: economics.product_weight_kg,
         carton_length_mm: prod.carton_length_mm,
         carton_height_mm: prod.carton_height_mm,
         carton_width_mm: prod.carton_width_mm,
-        carton_weight_kg: prod.carton_weight_kg
+        carton_weight_kg: prod.carton_weight_kg,
+        fob: economics.fob_current_cost_value,
+        exw: economics.exw_current_cost_value,
+        cnf: economics.cnf_current_cost_value,
+        cnf_diff: economics.cnf_diff_current_cost_value,
+        ddp: economics.ddp_current_cost_value,
+        mrsp: prod.mrsp,
+        cbm: economics.case_cbm,
+        landed_cost_usa: economics.landed_cost_usa,
+        landed_cost_canada: economics.landed_cost_canada,
+        landed_cost_france: economics.landed_cost_france,
+        landed_cost_morocco: economics.landed_cost_morocco,
+        landed_cost_israel: economics.landed_cost_israel
       })
       .onConflictDoUpdate({
         target: productTable.tech_sku_id,
@@ -319,7 +419,30 @@ async function seed() {
           cn_code: prod.cn_code,
           status: prod.status,
           description: prod.description,
-          vendor: prod.vendor
+          vendor: prod.vendor,
+          origin_country: prod.origin_country,
+          product_length_mm: economics.product_length_mm,
+          product_width_mm: economics.product_width_mm,
+          product_height_mm: economics.product_height_mm,
+          product_length_cm: economics.product_length_cm,
+          product_width_cm: economics.product_width_cm,
+          product_height_cm: economics.product_height_cm,
+          product_length_in: economics.product_length_in,
+          product_width_in: economics.product_width_in,
+          product_height_in: economics.product_height_in,
+          product_weight_kg: economics.product_weight_kg,
+          fob: economics.fob_current_cost_value,
+          exw: economics.exw_current_cost_value,
+          cnf: economics.cnf_current_cost_value,
+          cnf_diff: economics.cnf_diff_current_cost_value,
+          ddp: economics.ddp_current_cost_value,
+          mrsp: prod.mrsp,
+          cbm: economics.case_cbm,
+          landed_cost_usa: economics.landed_cost_usa,
+          landed_cost_canada: economics.landed_cost_canada,
+          landed_cost_france: economics.landed_cost_france,
+          landed_cost_morocco: economics.landed_cost_morocco,
+          landed_cost_israel: economics.landed_cost_israel
         }
       });
 
@@ -352,14 +475,13 @@ async function seed() {
         carton_weight_kg: prod.carton_weight_kg,
         hts_code: prod.hts_code,
         hts_duty: prod.hts_duty,
-        fob_current_cost_value: prod.fob_current_cost_value,
         mrsp: prod.mrsp,
         image_path: prod.image_path,
         inventory_today: 1420,
         inventory_today_7: 1200,
         inventory_today_14: 980,
         inventory_today_21: 750,
-        ...economics
+        ...viewEconomics
       })
       .onConflictDoUpdate({
         target: productViewTable.tech_sku_id,
@@ -369,15 +491,55 @@ async function seed() {
           description: prod.description,
           vendor: prod.vendor,
           brand_name: prod.brand_name,
+          origin_country: prod.origin_country,
           category: prod.category,
-          fob_current_cost_value: prod.fob_current_cost_value,
-          ...economics
+          image_path: prod.image_path,
+          ...viewEconomics
         }
       });
 
     console.log(
-      `✓ [${prod.cn_code}] ${prod.short_description}: FOB $${prod.fob_current_cost_value} -> Landed Cost (40HC): $${economics.landed_cost_40hc} (${economics.optimal_pieces_per_40hc} pcs/container)`
+      `✓ [${prod.cn_code}] (${prod.origin_country}) EXW $${economics.exw_current_cost_value} -> FOB $${economics.fob_current_cost_value} -> USA $${economics.landed_cost_usa} | CAN $${economics.landed_cost_canada} | FRA $${economics.landed_cost_france} | MAR $${economics.landed_cost_morocco} | ISR $${economics.landed_cost_israel}`
     );
+  }
+
+  // 4. Backfill any other existing rows in product_view_table & product
+  const allViewRows = await db.select().from(productViewTable);
+  for (const row of allViewRows) {
+    const economics = calculateProductEconomics(row);
+    const { base_cost, tariff_cost, ...viewEconomics } = economics;
+
+    await db
+      .update(productViewTable)
+      .set(viewEconomics)
+      .where(eq(productViewTable.tech_sku_id, row.tech_sku_id));
+
+    await db
+      .update(productTable)
+      .set({
+        product_length_mm: economics.product_length_mm,
+        product_width_mm: economics.product_width_mm,
+        product_height_mm: economics.product_height_mm,
+        product_length_cm: economics.product_length_cm,
+        product_width_cm: economics.product_width_cm,
+        product_height_cm: economics.product_height_cm,
+        product_length_in: economics.product_length_in,
+        product_width_in: economics.product_width_in,
+        product_height_in: economics.product_height_in,
+        product_weight_kg: economics.product_weight_kg,
+        fob: economics.fob_current_cost_value,
+        exw: economics.exw_current_cost_value,
+        cnf: economics.cnf_current_cost_value,
+        cnf_diff: economics.cnf_diff_current_cost_value,
+        ddp: economics.ddp_current_cost_value,
+        cbm: economics.case_cbm,
+        landed_cost_usa: economics.landed_cost_usa,
+        landed_cost_canada: economics.landed_cost_canada,
+        landed_cost_france: economics.landed_cost_france,
+        landed_cost_morocco: economics.landed_cost_morocco,
+        landed_cost_israel: economics.landed_cost_israel
+      })
+      .where(eq(productTable.tech_sku_id, row.tech_sku_id));
   }
 
   console.log('🎉 Seed completed successfully!');

@@ -139,10 +139,13 @@ export const addProduct = authActionClient
       fob_current_cost_value: parsedInput.fob,
       exw_current_cost_value: parsedInput.exw,
       cnf_current_cost_value: parsedInput.cnf,
+      cnf_diff_current_cost_value: parsedInput.cnf_diff,
       ddp_current_cost_value: parsedInput.ddp,
       mrsp: parsedInput.mrsp,
       commission_percentage: parsedInput.commission_percentage
     });
+
+    const { base_cost, tariff_cost, ...viewEconomics } = economics;
 
     await db.insert(productViewTable).values({
       tech_sku_id: techSkuId,
@@ -168,13 +171,9 @@ export const addProduct = authActionClient
       carton_height_mm: productDataInput.carton_height_mm,
       carton_width_mm: productDataInput.carton_width_mm,
       carton_weight_kg: productDataInput.carton_weight_kg,
-      fob_current_cost_value: parsedInput.fob,
-      exw_current_cost_value: parsedInput.exw,
-      cnf_current_cost_value: parsedInput.cnf,
-      ddp_current_cost_value: parsedInput.ddp,
       mrsp: parsedInput.mrsp,
       commission_percentage: parsedInput.commission_percentage,
-      ...economics
+      ...viewEconomics
     });
 
     revalidatePath('/dashboard/products_view');

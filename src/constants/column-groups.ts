@@ -1,21 +1,91 @@
 export const COLUMN_GROUPS = {
   default: {
-    label: 'Default',
+    label: 'Default (Trade & Landed Overview)',
     columns: [
       'cn_code',
       'status',
-      'factory_code',
-      'factory_mold',
-      'item_upc',
-      'case_upc',
       'origin_country',
       'vendor',
       'brand_name',
-      'pre_price',
-      'factory_name',
       'description',
-      'short_description',
-      'notes'
+      // Product Dimensions (cm & inches)
+      'product_length_cm',
+      'product_width_cm',
+      'product_height_cm',
+      'product_length_in',
+      'product_width_in',
+      'product_height_in',
+      // 5 Base Incoterms
+      'exw_current_cost_value',
+      'fob_current_cost_value',
+      'cnf_current_cost_value',
+      'cnf_diff_current_cost_value',
+      'ddp_current_cost_value',
+      // 5 Destination Country Landed Prices
+      'landed_cost_usa',
+      'landed_cost_canada',
+      'landed_cost_france',
+      'landed_cost_morocco',
+      'landed_cost_israel',
+      'mrsp'
+    ]
+  },
+
+  incoterm: {
+    label: 'Incoterms (EXW, FOB, CNF, CNF Diff, DDP)',
+    columns: [
+      'exw_current_cost_value',
+      'exw_current_cost_start_date',
+      'exw_current_cost_update_commentary',
+      'fob_current_cost_value',
+      'fob_current_cost_start_date',
+      'fob_current_cost_update_commentary',
+      'cnf_current_cost_value',
+      'cnf_current_cost_start_date',
+      'cnf_current_cost_update_commentary',
+      'cnf_diff_current_cost_value',
+      'cnf_diff_current_cost_start_date',
+      'cnf_diff_current_cost_update_commentary',
+      'ddp_current_cost_value',
+      'ddp_current_cost_start_date',
+      'ddp_current_cost_update_commentary',
+      'mrsp'
+    ]
+  },
+
+  destination_landed_costs: {
+    label: 'Landed Costs by Country (USA, CAN, FRA, MAR, ISR)',
+    columns: [
+      'landed_cost_usa',
+      'landed_cost_canada',
+      'landed_cost_france',
+      'landed_cost_morocco',
+      'landed_cost_israel'
+    ]
+  },
+
+  product_dimensions_metric: {
+    label: 'Product Dimensions (cm & mm)',
+    columns: [
+      'product_length_cm',
+      'product_width_cm',
+      'product_height_cm',
+      'product_length_mm',
+      'product_width_mm',
+      'product_height_mm',
+      'product_weight_kg',
+      'product_volume_ml'
+    ]
+  },
+
+  product_dimensions_imperial: {
+    label: 'Product Dimensions (Inches & lb)',
+    columns: [
+      'product_length_in',
+      'product_width_in',
+      'product_height_in',
+      'product_weight_lb',
+      'product_volume_oz'
     ]
   },
 
@@ -25,8 +95,16 @@ export const COLUMN_GROUPS = {
   },
 
   attributes: {
-    label: 'Atributes',
+    label: 'Attributes & Factory Codes',
     columns: [
+      'factory_code',
+      'factory_mold',
+      'item_upc',
+      'case_upc',
+      'pre_price',
+      'factory_name',
+      'short_description',
+      'notes',
       'consumer_use',
       'set_collection',
       'product_collection',
@@ -46,57 +124,13 @@ export const COLUMN_GROUPS = {
   },
 
   pieces: {
-    label: 'Pieces',
+    label: 'Pieces & Packaging',
     columns: [
       'pieces_per_unit',
       'case_pack',
       'pieces_per_carton',
       'pieces_per_polybag',
       'polybag_per_pallet'
-    ]
-  },
-
-  incoterm: {
-    label: 'Incoterm',
-    columns: [
-      'fob_current_cost_value',
-      'fob_current_cost_start_date',
-      'fob_current_cost_update_commentary',
-      'exw_current_cost_value',
-      'exw_current_cost_start_date',
-      'exw_current_cost_update_commentary',
-      'cnf_current_cost_value',
-      'cnf_current_cost_start_date',
-      'cnf_current_cost_update_commentary',
-      'cnf_diff_current_cost_value',
-      'cnf_diff_current_cost_start_date',
-      'cnf_diff_current_cost_update_commentary',
-      'ddp_current_cost_value',
-      'ddp_current_cost_start_date',
-      'ddp_current_cost_update_commentary',
-      'mrsp'
-    ]
-  },
-
-  product_dimensions_metric: {
-    label: 'Product Dimensions (Metric)',
-    columns: [
-      'product_length_mm',
-      'product_width_mm',
-      'product_height_mm',
-      'product_weight_kg',
-      'product_volume_ml'
-    ]
-  },
-
-  product_dimensions_imperial: {
-    label: 'Product Dimensions (Imperial)',
-    columns: [
-      'product_length_inches',
-      'product_width_inches',
-      'product_height_inches',
-      'product_weight_lb',
-      'product_volume_oz'
     ]
   },
 
@@ -139,9 +173,9 @@ export const COLUMN_GROUPS = {
       'polybag_length_mm',
       'polybag_width_mm',
       'polybag_height_mm',
-      'polybag_to_case_length_mm',
-      'polybag_to_case_width_mm',
-      'polybag_to_case_height_mm'
+      'polybag_to_carton_length_mm',
+      'polybag_to_carton_width_mm',
+      'polybag_to_carton_height_mm'
     ]
   },
 
@@ -151,9 +185,9 @@ export const COLUMN_GROUPS = {
       'polybag_length_in',
       'polybag_width_in',
       'polybag_height_in',
-      'polybag_to_case_length_in',
-      'polybag_to_case_width_in',
-      'polybag_to_case_height_in'
+      'polybag_to_carton_length_in',
+      'polybag_to_carton_width_in',
+      'polybag_to_carton_height_in'
     ]
   },
 
@@ -168,7 +202,7 @@ export const COLUMN_GROUPS = {
   },
 
   logistic_cost: {
-    label: 'Logistic Costs',
+    label: 'Logistic Costs (Containers)',
     columns: [
       'logistic_cost_20std',
       'logistic_cost_40hc',
@@ -179,7 +213,7 @@ export const COLUMN_GROUPS = {
   },
 
   duty: {
-    label: 'Duty',
+    label: 'Duty & HTS',
     columns: [
       'tariff',
       'duty_percentage',
@@ -192,14 +226,14 @@ export const COLUMN_GROUPS = {
     ]
   },
 
-  landing_costs: {
-    label: 'Landing Costs',
+  landed_costs: {
+    label: 'Landed Costs (Containers)',
     columns: [
-      'landing_cost_40hc',
-      'landing_cost_45hc',
-      'landing_cost_40std',
-      'landing_cost_20std',
-      'landing_cost_53ft'
+      'landed_cost_40hc',
+      'landed_cost_45hc',
+      'landed_cost_40std',
+      'landed_cost_20std',
+      'landed_cost_53ft'
     ]
   },
 
@@ -216,35 +250,35 @@ export const COLUMN_GROUPS = {
   },
 
   logistics_optimization: {
-    label: 'Logistics',
+    label: 'Container Capacity Optimization',
     columns: [
       'max_carton_per_weight',
       'max_case_pack_per_weight',
       'confirmed_carton_per_40hc',
       'calculated_cartons_40hc_per_volume',
       'calculated_case_pack_40hc_per_volume',
-      'optimal_cartons_40hc',
-      'optimal_case_pack_40hc',
+      'optimal_cartons_per_40hc',
+      'optimal_pieces_per_40hc',
       'confirmed_carton_per_45hc',
       'calculated_cartons_45hc_per_volume',
       'calculated_case_pack_45hc_per_volume',
-      'optimal_cartons_45hc',
-      'optimal_case_pack_45hc',
+      'optimal_cartons_per_45hc',
+      'optimal_pieces_per_45hc',
       'confirmed_carton_per_40std',
       'calculated_cartons_40std_per_volume',
       'calculated_case_pack_40std_per_volume',
       'optimal_cartons_per_40std',
-      'optimal_case_pack_40std',
+      'optimal_pieces_per_40std',
       'confirmed_carton_per_20std',
       'calculated_cartons_20std_per_volume',
       'calculated_case_pack_20std_per_volume',
-      'optimal_cartons_20std',
-      'optimal_case_pack_per_20std',
+      'optimal_cartons_per_20std',
+      'optimal_pieces_per_20std',
       'confirmed_carton_per_53ft',
       'calculated_cartons_53ft_per_volume',
       'calculated_case_pack_53ft_per_volume',
-      'optimal_cartons_53ft',
-      'optimal_case_pack_53ft'
+      'optimal_cartons_per_53ft',
+      'optimal_pieces_per_53ft'
     ]
   },
 
@@ -270,49 +304,5 @@ export const COLUMN_GROUPS = {
       'hi',
       'carton_per_american_pallet'
     ]
-  },
-
-  landed_costs: {
-    label: 'Landed Costs',
-    columns: [
-      'landed_cost_40hc',
-      'landed_cost_45hc',
-      'landed_cost_40std',
-      'landed_cost_20std',
-      'landed_cost_53ft'
-    ]
-  },
-
-  optimal_pieces: {
-    label: 'Optimal Pieces',
-    columns: [
-      'optimal_cartons_per_40hc',
-      'optimal_pieces_per_40hc',
-      'optimal_cartons_per_45hc',
-      'optimal_pieces_per_45hc',
-      'optimal_cartons_per_40std',
-      'optimal_pieces_per_40std',
-      'optimal_cartons_per_20std',
-      'optimal_pieces_per_20std',
-      'optimal_cartons_per_53ft',
-      'optimal_pieces_per_53ft'
-    ]
-  },
-
-  polybag_to_carton: {
-    label: 'Polybag to Carton',
-    columns: [
-      'polybag_to_carton_length_mm',
-      'polybag_to_carton_width_mm',
-      'polybag_to_carton_height_mm',
-      'polybag_to_carton_length_in',
-      'polybag_to_carton_width_in',
-      'polybag_to_carton_height_in'
-    ]
-  },
-
-  product_dimmensions_imperial: {
-    label: 'Product Dimmensions (Imperial)',
-    columns: ['product_length_in', 'product_height_in', 'product_width_in']
   }
 } as const;

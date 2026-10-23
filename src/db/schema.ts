@@ -67,6 +67,9 @@ export const productViewTable = pgTable('product_view_table', {
   product_length_mm: real('product_length_mm'),
   product_height_mm: real('product_height_mm'),
   product_width_mm: real('product_width_mm'),
+  product_length_cm: real('product_length_cm'),
+  product_height_cm: real('product_height_cm'),
+  product_width_cm: real('product_width_cm'),
   product_weight_kg: real('product_weight_kg'),
   product_volume_ml: real('product_volume_ml'),
 
@@ -246,6 +249,12 @@ export const productViewTable = pgTable('product_view_table', {
   landed_cost_20std: real('landed_cost_20std'),
   landed_cost_53ft: real('landed_cost_53ft'),
 
+  landed_cost_usa: real('landed_cost_usa'),
+  landed_cost_canada: real('landed_cost_canada'),
+  landed_cost_france: real('landed_cost_france'),
+  landed_cost_morocco: real('landed_cost_morocco'),
+  landed_cost_israel: real('landed_cost_israel'),
+
   image_path: varchar('image_path', { length: 255 }),
 
   average_cost: numeric('average_cost', { precision: 28, scale: 9 }),
@@ -312,6 +321,12 @@ export const productTable = pgTable('product', {
   product_length_mm: real('product_length_mm'),
   product_width_mm: real('product_width_mm'),
   product_height_mm: real('product_height_mm'),
+  product_length_cm: real('product_length_cm'),
+  product_width_cm: real('product_width_cm'),
+  product_height_cm: real('product_height_cm'),
+  product_length_in: real('product_length_in'),
+  product_width_in: real('product_width_in'),
+  product_height_in: real('product_height_in'),
   product_weight_kg: real('product_weight_kg'),
   product_volume_ml: real('product_volume_ml'),
 
@@ -380,7 +395,13 @@ export const productTable = pgTable('product', {
   ),
   polybag_product_pallets_per_20std: integer(
     'polybag_product_pallets_per_20std'
-  )
+  ),
+
+  landed_cost_usa: real('landed_cost_usa'),
+  landed_cost_canada: real('landed_cost_canada'),
+  landed_cost_france: real('landed_cost_france'),
+  landed_cost_morocco: real('landed_cost_morocco'),
+  landed_cost_israel: real('landed_cost_israel')
 });
 
 /* PRODUCT HISTORIC COSTS */
